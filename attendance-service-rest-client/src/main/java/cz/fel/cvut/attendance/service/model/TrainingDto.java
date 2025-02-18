@@ -5,8 +5,11 @@ import java.time.LocalTime;
 
 public record TrainingDto(
         Long id,
+        String name,
         DayOfWeek dayOfWeek,
         LocalTime startTime,
         LocalTime endTime,
-        String schoolYear
+        String schoolYear,
+        int price,
+        int capacity
 ) {}

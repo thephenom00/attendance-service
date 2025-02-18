@@ -22,22 +22,28 @@ public class ChildApiImpl implements ChildApi {
     }
 
     @Override
+    public ResponseEntity<ChildDto> addChildToTraining(Long id) {
+        return ResponseEntity.ok(childService.addChildToTraining(id));
+    }
+
+    @Override
     public ResponseEntity<ChildDto> getChild(Long id) {
-        return null;
+        return ResponseEntity.ok(childService.getChild(id));
     }
 
     @Override
     public ResponseEntity<List<ChildDto>> getChildren() {
-        return null;
+        return ResponseEntity.ok(childService.getChildren());
     }
 
     @Override
     public ResponseEntity<Void> deleteChild(Long id) {
-        return null;
+        childService.deleteChild(id);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
     public ResponseEntity<ChildDto> updateChild(Long id, ChildDto childDto) {
-        return null;
+        return ResponseEntity.ok(childService.updateChild(id, childDto));
     }
 }

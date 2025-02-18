@@ -6,6 +6,7 @@ import cz.fel.cvut.attendance.service.model.ChildDto;
 import cz.fel.cvut.attendance.service.model.SchoolDto;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -13,12 +14,15 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ChildMapper {
+    @Mapping(source = "parent.id", target = "parentId")
     ChildDto toDto(Child childEntity);
 
     Child toEntity(ChildDto childDto);
 
     List<ChildDto> toDtoList(List<Child> children);
+
     List<Child> toEntityList(List<ChildDto> childDtos);
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateChildFromDto(ChildDto childDto, @MappingTarget Child Child);
 }

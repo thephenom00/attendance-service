@@ -20,7 +20,7 @@ import java.util.List;
 public interface TrainingApi {
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping(value = "/add/{schoolId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/create/{schoolId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<TrainingDto> createTraining(@RequestBody TrainingDto trainingDto, @PathVariable Long schoolId);
 
     @ResponseStatus(HttpStatus.OK)

@@ -62,4 +62,11 @@ public class Child {
 
     private Long requestedTrainingId;
 
+    public Child(String firstName, String lastName, LocalDate dateOfBirth, String birthNumber, Long requestedTrainingId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.birthNumber = birthNumber;
+        this.requestedTrainingId = requestedTrainingId;
+    }
 }

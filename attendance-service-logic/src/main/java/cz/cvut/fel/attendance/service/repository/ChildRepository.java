@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChildRepository extends JpaRepository<Child, Long> {
+    boolean existsByBirthNumber(String birthNumber);
+    boolean existsByLastName(String lastName);
+    boolean existsByFirstName(String firstName);
 }

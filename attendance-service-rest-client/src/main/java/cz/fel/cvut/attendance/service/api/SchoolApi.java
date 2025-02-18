@@ -1,6 +1,7 @@
 package cz.fel.cvut.attendance.service.api;
 
 import cz.fel.cvut.attendance.service.model.SchoolDto;
+import cz.fel.cvut.attendance.service.model.TrainingDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,10 @@ public interface SchoolApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{id}")
     ResponseEntity<SchoolDto> getSchool(@PathVariable Long id);
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/{id}/trainings")
+    ResponseEntity<TrainingDto> getTrainingsBySchool(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping

@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class School {
 
     @Id
@@ -40,9 +42,17 @@ public class School {
 
     private String instructions;
 
+    public School(String name, String address, String city, String contactPerson, String contactNumber, String instructions) {
+        this.name = name;
+        this.address = address;
+        this.city = city;
+        this.contactPerson = contactPerson;
+        this.contactNumber = contactNumber;
+        this.instructions = instructions;
+    }
+
     public void addTraining(Training training) {
         this.trainings.add(training);
-        training.setSchool(this);
     }
 
 }

@@ -22,6 +22,10 @@ public interface ChildApi {
     ResponseEntity<ChildDto> createChild(@RequestBody ChildDto childDto);
 
     @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/addToTraining")
+    ResponseEntity<ChildDto> addChildToTraining(@PathVariable Long id);
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{id}")
     ResponseEntity<ChildDto> getChild(@PathVariable Long id);
 

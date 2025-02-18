@@ -30,7 +30,7 @@ public class TrainingService {
         Training training = trainingMapper.toEntity(trainingDto);
 
         training.setSchool(school);
-        school.getTrainings().add(training);
+        school.addTraining(training);
 
         Training savedTraining = trainingRepository.save(training);
 

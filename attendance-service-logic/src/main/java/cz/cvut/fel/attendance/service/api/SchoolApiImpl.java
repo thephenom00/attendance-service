@@ -5,6 +5,7 @@ import cz.fel.cvut.attendance.service.model.SchoolDto;
 import cz.cvut.fel.attendance.service.model.School;
 import cz.cvut.fel.attendance.service.service.SchoolService;
 //import cz.fel.cvut.attendance.service.api.SchoolApi;
+import cz.fel.cvut.attendance.service.model.TrainingDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,11 @@ public class SchoolApiImpl implements SchoolApi {
     @Override
     public ResponseEntity<SchoolDto> getSchool(Long id) {
         return ResponseEntity.ok(schoolService.getSchool(id));
+    }
+
+    @Override
+    public ResponseEntity<TrainingDto> getTrainingsBySchool(Long id) {
+        return null;
     }
 
     @Override

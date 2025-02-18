@@ -6,6 +6,8 @@ public record ChildDto(
         Long id,
         String firstName,
         String lastName,
-        LocalDate birthNumber,
+        LocalDate dateOfBirth,
+        String birthNumber,
+        Long parentId,
         Long requestedTrainingId
 ) {}
