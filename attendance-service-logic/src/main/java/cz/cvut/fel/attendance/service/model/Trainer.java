@@ -3,6 +3,7 @@ package cz.cvut.fel.attendance.service.model;
 import cz.cvut.fel.attendance.service.enums.Role;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -26,7 +27,7 @@ public class Trainer extends User {
     private List<Training> trainings = new ArrayList<>();
 
     @OneToMany(mappedBy = "trainer")
-    private List<TrainerAttendance> attendances;
+    private List<TrainerAttendance> attendances = new ArrayList<>();
 
     private String description;
 
@@ -34,8 +35,31 @@ public class Trainer extends User {
         super(firstName, lastName, email, phoneNumber, password, Role.TRAINER);
     }
 
-    private void addTraining(Training training) {
-        this.trainings.add(training);
+    public boolean addTraining(Training training) {
+        if (!this.trainings.contains(training)) {
+            this.trainings.add(training);
+            return true;
+        }
+        return false;
     }
+
+    public boolean removeTraining(Training training) {
+        if (this.trainings.contains(training)) {
+            this.trainings.remove(training);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addTrainerAttendance(TrainerAttendance trainerAttendance) {
+        if (!this.attendances.contains(trainerAttendance)) {
+            this.attendances.add(trainerAttendance);
+            return true;
+        }
+        return false;
+    }
+
+
+
 
 }

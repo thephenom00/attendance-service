@@ -2,11 +2,11 @@ package cz.fel.cvut.attendance.service.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class ParentException extends RuntimeException {
+public class EventException extends RuntimeException {
 
-    private final HttpStatus status;
+    public final HttpStatus status;
 
-    public ParentException(String message, HttpStatus status) {
+    public EventException(String message, HttpStatus status) {
         super(message);
         this.status = status;
     }

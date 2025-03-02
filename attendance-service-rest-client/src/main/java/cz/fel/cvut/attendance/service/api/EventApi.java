@@ -1,7 +1,7 @@
 package cz.fel.cvut.attendance.service.api;
 
-import cz.fel.cvut.attendance.service.model.SchoolDto;
-import cz.fel.cvut.attendance.service.model.TrainingDto;
+import cz.fel.cvut.attendance.service.model.ChildDto;
+import cz.fel.cvut.attendance.service.model.EventDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,29 +16,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 
-@RequestMapping("/school")
-public interface SchoolApi {
+@RequestMapping("/event")
+public interface EventApi {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value="/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<SchoolDto> createSchool(@RequestBody SchoolDto schoolDto);
+    ResponseEntity<EventDto> createEvent(@RequestBody EventDto eventDto);
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value="/{id}")
-    ResponseEntity<SchoolDto> getSchool(@PathVariable Long id);
-
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value="/{id}/trainings")
-    ResponseEntity<TrainingDto> getTrainingsBySchool(@PathVariable Long id);
+    ResponseEntity<EventDto> getEvent(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    ResponseEntity<List<SchoolDto>> getSchools();
+    ResponseEntity<List<EventDto>> getEvents();
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> deleteSchool(@PathVariable Long id);
+    ResponseEntity<Void> deleteEvent(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping(value="/{id}")
-    ResponseEntity<SchoolDto> updateSchool(@PathVariable Long id, @RequestBody SchoolDto schoolDto);
+    ResponseEntity<EventDto> updateEvent(@PathVariable Long id, @RequestBody EventDto eventDto);
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value="/{id}/getRegisteredChildren")
+    ResponseEntity<List<ChildDto>> getRegisteredChildren(@PathVariable Long id);
+
 }

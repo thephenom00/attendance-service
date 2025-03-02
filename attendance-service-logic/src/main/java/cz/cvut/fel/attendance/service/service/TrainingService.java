@@ -1,12 +1,15 @@
 package cz.cvut.fel.attendance.service.service;
 
+import cz.cvut.fel.attendance.service.mappers.ChildMapper;
 import cz.cvut.fel.attendance.service.mappers.TrainingMapper;
+import cz.cvut.fel.attendance.service.model.Child;
 import cz.cvut.fel.attendance.service.model.School;
 import cz.cvut.fel.attendance.service.model.Training;
 import cz.cvut.fel.attendance.service.repository.SchoolRepository;
 import cz.cvut.fel.attendance.service.repository.TrainingRepository;
 import cz.fel.cvut.attendance.service.exception.SchoolException;
 import cz.fel.cvut.attendance.service.exception.TrainingException;
+import cz.fel.cvut.attendance.service.model.ChildDto;
 import cz.fel.cvut.attendance.service.model.TrainingDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,8 @@ public class TrainingService {
     private final SchoolRepository schoolRepository;
 
     private final TrainingMapper trainingMapper;
+
+    private final ChildMapper childMapper;
 
     public TrainingDto createTraining(TrainingDto trainingDto, Long schoolId) {
         School school = schoolRepository.findById(schoolId).orElseThrow(() -> new SchoolException("School with ID " + schoolId + " not found", HttpStatus.NOT_FOUND));
@@ -67,6 +72,16 @@ public class TrainingService {
 
         trainingRepository.save(training);
         return trainingMapper.toDto(training);
+    }
+
+    public List<ChildDto> getChildren(Long id) {
+        Training training = trainingRepository.findById(id)
+                .orElseThrow(() -> new TrainingException("Training with ID " + id + " not found.",
+                        HttpStatus.NOT_FOUND));
+
+        List<Child> children = training.getChildren();
+
+        return childMapper.toDtoList(children);
     }
 
 }

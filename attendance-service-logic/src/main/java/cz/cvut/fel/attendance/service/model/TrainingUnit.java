@@ -1,13 +1,10 @@
 package cz.cvut.fel.attendance.service.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -35,12 +32,30 @@ public class TrainingUnit {
     private Training training;
 
     @OneToMany(mappedBy = "trainingUnit")
-    private List<TrainerAttendance> trainerAttendances;
+    private List<TrainerAttendance> trainerAttendances = new ArrayList<>();
 
     @OneToMany(mappedBy = "trainingUnit")
-    private List<ChildAttendance> childAttendances;
+    private List<ChildAttendance> childAttendances = new ArrayList<>();
 
     private LocalDate date;
 
     private String description;
+
+    private boolean current;
+
+    public boolean addTrainerAttendance(TrainerAttendance trainerAttendance) {
+        if (!this.trainerAttendances.contains(trainerAttendance)) {
+            this.trainerAttendances.add(trainerAttendance);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addChildAttendance(ChildAttendance childAttendance) {
+        if (this.childAttendances.contains(childAttendance)) {
+            this.childAttendances.remove(childAttendance);
+            return true;
+        }
+        return false;
+    }
 }

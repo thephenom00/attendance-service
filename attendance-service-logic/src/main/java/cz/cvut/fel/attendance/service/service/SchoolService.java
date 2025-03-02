@@ -33,7 +33,7 @@ public class SchoolService {
 
     public void deleteSchool(Long id) {
         if (!schoolRepository.existsById(id)) {
-            throw new SchoolException("School with id: " + id + " is not existing.",
+            throw new SchoolException("School with ID: " + id + " is not existing.",
                     HttpStatus.NOT_FOUND);
         }
 

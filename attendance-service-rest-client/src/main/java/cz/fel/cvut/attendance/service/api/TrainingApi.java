@@ -1,6 +1,6 @@
 package cz.fel.cvut.attendance.service.api;
 
-import cz.fel.cvut.attendance.service.model.SchoolDto;
+import cz.fel.cvut.attendance.service.model.ChildDto;
 import cz.fel.cvut.attendance.service.model.TrainingDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/training")
 public interface TrainingApi {
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/create/{schoolId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<TrainingDto> createTraining(@RequestBody TrainingDto trainingDto, @PathVariable Long schoolId);
 
@@ -38,4 +38,8 @@ public interface TrainingApi {
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}")
     ResponseEntity<TrainingDto> updateTraining(@PathVariable Long id, @RequestBody TrainingDto trainingDto);
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/getChildren")
+    ResponseEntity<List<ChildDto>> getChildren(@PathVariable Long id);
 }

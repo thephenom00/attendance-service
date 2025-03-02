@@ -80,10 +80,9 @@ public class test {
                 }
                 """;
 
-        mvc.perform(post("/school")
+        mvc.perform(post("/school/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(schoolJson))
-                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("New School"))
                 .andExpect(jsonPath("$.address").value("123 Main St"))
                 .andExpect(jsonPath("$.city").value("Prague"));

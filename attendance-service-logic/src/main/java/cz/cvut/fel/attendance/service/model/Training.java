@@ -1,13 +1,11 @@
 package cz.cvut.fel.attendance.service.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,9 +18,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-import org.springframework.http.converter.json.GsonBuilderUtils;
+
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -90,12 +86,36 @@ public class Training {
         this.capacity = capacity;
     }
 
-    public void addTrainer(Trainer trainer) {
-        this.trainers.add(trainer);
+    public boolean addTrainer(Trainer trainer) {
+        if (!this.trainers.contains(trainer)) {
+            this.trainers.add(trainer);
+            return true;
+        }
+        return false;
     }
 
-    public void addChild(Child child) {
-        this.children.add(child);
+    public boolean removeTrainer(Trainer trainer) {
+        if (this.trainers.contains(trainer)) {
+            this.trainers.remove(trainer);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addChild(Child child) {
+        if (!this.children.contains(child)) {
+            this.children.add(child);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeChild(Child child) {
+        if (this.children.contains(child)) {
+            this.children.remove(child);
+            return true;
+        }
+        return false;
     }
 
     public void addHoliday(LocalDate date) {

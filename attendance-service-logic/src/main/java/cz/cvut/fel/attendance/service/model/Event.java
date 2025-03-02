@@ -28,6 +28,8 @@ public class Event {
     @ManyToMany(mappedBy = "events")
     private List<Child> children = new ArrayList<>();
 
+    private String name;
+
     private LocalDate startDate;
 
     private LocalDate endDate;
@@ -37,5 +39,21 @@ public class Event {
     private int price;
 
     private String description;
+
+    public boolean addChild(Child child) {
+        if (!this.children.contains(child)) {
+            this.children.add(child);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeChild(Child child) {
+        if (this.children.contains(child)) {
+            this.children.remove(child);
+            return true;
+        }
+        return false;
+    }
 
 }

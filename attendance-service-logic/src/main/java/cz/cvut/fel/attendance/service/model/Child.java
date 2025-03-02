@@ -1,8 +1,8 @@
 package cz.cvut.fel.attendance.service.model;
 
 
-import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,7 +26,6 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@DiscriminatorValue("CHILD")
 public class Child {
 
     @Id
@@ -50,7 +49,7 @@ public class Child {
     private Parent parent;
 
     @OneToMany(mappedBy = "child")
-    private List<ChildAttendance> attendances;
+    private List<ChildAttendance> attendances = new ArrayList<>();
 
     private String firstName;
 
@@ -69,4 +68,29 @@ public class Child {
         this.birthNumber = birthNumber;
         this.requestedTrainingId = requestedTrainingId;
     }
+
+    public boolean addEvent(Event event) {
+        if (!this.events.contains(event)) {
+            this.events.add(event);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeEvent(Event event) {
+        if (this.events.contains(event)) {
+            this.events.remove(event);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addChildAttendance(ChildAttendance childAttendance) {
+        if (!this.attendances.contains(childAttendance)) {
+            this.attendances.add(childAttendance);
+            return true;
+        }
+        return false;
+    }
+
 }
