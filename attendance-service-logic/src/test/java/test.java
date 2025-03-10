@@ -10,8 +10,6 @@ import cz.cvut.fel.attendance.service.repository.SchoolRepository;
 import cz.cvut.fel.attendance.service.repository.TrainingRepository;
 import cz.fel.cvut.attendance.service.model.TrainingDto;
 import jakarta.transaction.Transactional;
-import org.h2.util.json.JSONValidationTargetWithoutUniqueKeys;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

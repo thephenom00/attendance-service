@@ -28,7 +28,7 @@ public interface SchoolApi {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value="/{id}/trainings")
-    ResponseEntity<TrainingDto> getTrainingsBySchool(@PathVariable Long id);
+    ResponseEntity<List<TrainingDto>> getTrainingsBySchool(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping

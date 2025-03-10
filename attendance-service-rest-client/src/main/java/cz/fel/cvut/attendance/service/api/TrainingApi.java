@@ -2,6 +2,7 @@ package cz.fel.cvut.attendance.service.api;
 
 import cz.fel.cvut.attendance.service.model.ChildDto;
 import cz.fel.cvut.attendance.service.model.TrainingDto;
+import cz.fel.cvut.attendance.service.model.TrainingUnitDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,18 @@ public interface TrainingApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     ResponseEntity<List<TrainingDto>> getTrainings();
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/{id}/trainingUnit/current")
+    ResponseEntity<TrainingUnitDto> getCurrentTrainingUnit(@PathVariable Long id);
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/{id}/trainingUnit/past")
+    ResponseEntity<List<TrainingUnitDto>> getPastTrainingUnits(@PathVariable Long id);
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/{id}/trainingUnit")
+    ResponseEntity<List<TrainingUnitDto>> getTrainingUnits(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

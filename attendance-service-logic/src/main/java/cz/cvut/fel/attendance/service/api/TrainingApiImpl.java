@@ -4,6 +4,7 @@ import cz.cvut.fel.attendance.service.service.TrainingService;
 import cz.fel.cvut.attendance.service.api.TrainingApi;
 import cz.fel.cvut.attendance.service.model.ChildDto;
 import cz.fel.cvut.attendance.service.model.TrainingDto;
+import cz.fel.cvut.attendance.service.model.TrainingUnitDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,21 @@ public class TrainingApiImpl implements TrainingApi {
     @Override
     public ResponseEntity<List<TrainingDto>> getTrainings() {
         return ResponseEntity.ok(trainingService.getTrainings());
+    }
+
+    @Override
+    public ResponseEntity<TrainingUnitDto> getCurrentTrainingUnit(Long id) {
+        return ResponseEntity.ok(trainingService.getCurrentTrainingUnit(id));
+    }
+
+    @Override
+    public ResponseEntity<List<TrainingUnitDto>> getPastTrainingUnits(Long id) {
+        return ResponseEntity.ok(trainingService.getPastTrainingUnits(id));
+    }
+
+    @Override
+    public ResponseEntity<List<TrainingUnitDto>> getTrainingUnits(Long id) {
+        return ResponseEntity.ok(trainingService.getTrainingUnits(id));
     }
 
     @Override

@@ -30,8 +30,8 @@ public class SchoolApiImpl implements SchoolApi {
     }
 
     @Override
-    public ResponseEntity<TrainingDto> getTrainingsBySchool(Long id) {
-        return null;
+    public ResponseEntity<List<TrainingDto>> getTrainingsBySchool(Long id) {
+        return ResponseEntity.ok(schoolService.getTrainingsBySchool(id));
     }
 
     @Override
