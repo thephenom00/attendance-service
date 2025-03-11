@@ -56,6 +56,7 @@ public class ChildApiImpl implements ChildApi {
     @Override
     public ResponseEntity<Void> deleteChild(Long id) {
         childService.deleteChild(id);
+
         return ResponseEntity.noContent().build();
     }
 
