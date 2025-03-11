@@ -81,11 +81,11 @@
 //
 //            // Create Children
 //            List<Child> children = List.of(
-//                    new Child("Emma", "Smith", LocalDate.of(2015, 3, 10), "123456/7890", trainings.get(0).getId()),
-//                    new Child("Noah", "Johnson", LocalDate.of(2014, 7, 22), "234567/8901", trainings.get(1).getId()),
-//                    new Child("Liam", "Brown", LocalDate.of(2016, 1, 15), "345678/9012", trainings.get(2).getId()),
-//                    new Child("Sophia", "Williams", LocalDate.of(2013, 5, 19), "456789/0123", trainings.get(3).getId()),
-//                    new Child("Ethan", "Davis", LocalDate.of(2017, 8, 25), "567890/1234", trainings.get(4).getId())
+//                    new Child("Emma", "Smith", LocalDate.of(2015, 3, 10), "123 Maple St", "New York", 10001, "123456/7890", trainings.get(0).getId()),
+//                    new Child("Noah", "Johnson", LocalDate.of(2014, 7, 22), "456 Oak Ave", "Los Angeles", 90012, "234567/8901", trainings.get(1).getId()),
+//                    new Child("Liam", "Brown", LocalDate.of(2016, 1, 15), "789 Pine Rd", "Chicago", 60601, "345678/9012", trainings.get(2).getId()),
+//                    new Child("Sophia", "Williams", LocalDate.of(2013, 5, 19), "321 Birch Ln", "Houston", 77002, "456789/0123", trainings.get(3).getId()),
+//                    new Child("Ethan", "Davis", LocalDate.of(2017, 8, 25), "555 Cedar Blvd", "San Francisco", 94102, "567890/1234", trainings.get(4).getId())
 //            );
 //
 //            children.forEach(child -> {
