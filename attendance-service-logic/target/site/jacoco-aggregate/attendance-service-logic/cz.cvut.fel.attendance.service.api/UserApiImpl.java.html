@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>UserApiImpl.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">attendance-service-logic</a> &gt; <a href="../index.html" class="el_bundle">attendance-service-logic</a> &gt; <a href="index.source.html" class="el_package">cz.cvut.fel.attendance.service.api</a> &gt; <span class="el_source">UserApiImpl.java</span></div><h1>UserApiImpl.java</h1><pre class="source lang-java linenums">package cz.cvut.fel.attendance.service.api;
+
+import cz.cvut.fel.attendance.service.config.JwtUtil;
+import cz.cvut.fel.attendance.service.model.User;
+import cz.cvut.fel.attendance.service.service.UserService;
+import cz.fel.cvut.attendance.service.api.UserApi;
+import cz.fel.cvut.attendance.service.model.auth.AuthResponse;
+import cz.fel.cvut.attendance.service.model.auth.LoginRequest;
+import cz.fel.cvut.attendance.service.model.auth.RegisterRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.RestController;
+
+
+
+@RestController
+<span class="nc" id="L20">@RequiredArgsConstructor</span>
+public class UserApiImpl implements UserApi {
+
+    private final UserService userService;
+
+    private final AuthenticationManager authenticationManager;
+
+    private final JwtUtil jwtUtil;
+
+    @Override
+    public ResponseEntity&lt;AuthResponse&gt; registerParent(RegisterRequest request) {
+<span class="nc" id="L31">        String email = request.email();</span>
+<span class="nc" id="L32">        String password = request.password();</span>
+
+<span class="nc" id="L34">        userService.registerParent(request);</span>
+
+<span class="nc" id="L36">        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));</span>
+
+<span class="nc" id="L38">        final UserDetails userDetails = userService.loadUserByUsername(email);</span>
+
+<span class="nc" id="L40">        final String accessToken = jwtUtil.generateToken(userDetails);</span>
+
+<span class="nc" id="L42">        return ResponseEntity.ok(new AuthResponse(accessToken, email));</span>
+    }
+
+    @Override
+    public ResponseEntity&lt;AuthResponse&gt; registerTrainer(RegisterRequest request) {
+<span class="nc" id="L47">        String email = request.email();</span>
+<span class="nc" id="L48">        String password = request.password();</span>
+
+<span class="nc" id="L50">        userService.registerTrainer(request);</span>
+
+<span class="nc" id="L52">        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));</span>
+
+<span class="nc" id="L54">        final UserDetails userDetails = userService.loadUserByUsername(email);</span>
+
+<span class="nc" id="L56">        final String accessToken = jwtUtil.generateToken(userDetails);</span>
+
+<span class="nc" id="L58">        return ResponseEntity.ok(new AuthResponse(accessToken, email));</span>
+    }
+
+    @Override
+    public ResponseEntity&lt;AuthResponse&gt; login(LoginRequest request) {
+<span class="nc" id="L63">        String email = request.email();</span>
+<span class="nc" id="L64">        String password = request.password();</span>
+<span class="nc" id="L65">        User user = userService.login(email, password);</span>
+
+<span class="nc" id="L67">        authenticationManager.authenticate(</span>
+                new UsernamePasswordAuthenticationToken(email, password)
+        );
+
+<span class="nc" id="L71">        final UserDetails userDetails = userService.loadUserByUsername(email);</span>
+<span class="nc" id="L72">        final String accessToken = jwtUtil.generateToken(userDetails);</span>
+
+<span class="nc" id="L74">        return ResponseEntity.ok(new AuthResponse(accessToken, user.getEmail()));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

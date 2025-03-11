@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>TrainingUnitService.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">attendance-service-logic</a> &gt; <a href="../index.html" class="el_bundle">attendance-service-logic</a> &gt; <a href="index.source.html" class="el_package">cz.cvut.fel.attendance.service.service</a> &gt; <span class="el_source">TrainingUnitService.java</span></div><h1>TrainingUnitService.java</h1><pre class="source lang-java linenums">package cz.cvut.fel.attendance.service.service;
+
+import cz.cvut.fel.attendance.service.mappers.ChildAttendanceMapper;
+import cz.cvut.fel.attendance.service.mappers.TrainerAttendanceMapper;
+import cz.cvut.fel.attendance.service.mappers.TrainingUnitMapper;
+import cz.cvut.fel.attendance.service.model.Child;
+import cz.cvut.fel.attendance.service.model.ChildAttendance;
+import cz.cvut.fel.attendance.service.model.Trainer;
+import cz.cvut.fel.attendance.service.model.TrainerAttendance;
+import cz.cvut.fel.attendance.service.model.Training;
+import cz.cvut.fel.attendance.service.model.TrainingUnit;
+import cz.cvut.fel.attendance.service.repository.ChildAttendanceRepository;
+import cz.cvut.fel.attendance.service.repository.ChildRepository;
+import cz.cvut.fel.attendance.service.repository.TrainerAttendanceRepository;
+import cz.cvut.fel.attendance.service.repository.TrainingRepository;
+import cz.cvut.fel.attendance.service.repository.TrainingUnitRepository;
+import cz.cvut.fel.attendance.service.repository.UserRepository;
+import cz.fel.cvut.attendance.service.exception.TrainingException;
+import cz.fel.cvut.attendance.service.exception.TrainingUnitException;
+import cz.fel.cvut.attendance.service.model.ChildAttendanceDto;
+import cz.fel.cvut.attendance.service.model.TrainerAttendanceDto;
+import cz.fel.cvut.attendance.service.model.TrainingDto;
+import cz.fel.cvut.attendance.service.model.TrainingUnitDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+<span class="nc" id="L35">@RequiredArgsConstructor</span>
+@Transactional
+public class TrainingUnitService {
+
+    private final TrainingUnitRepository trainingUnitRepository;
+    private final TrainingRepository trainingRepository;
+    private final TrainerAttendanceRepository trainerAttendanceRepository;
+    private final ChildAttendanceRepository childAttendanceRepository;
+
+    private final UserRepository userRepository;
+    private final ChildRepository childRepository;
+
+    private final TrainingUnitMapper trainingUnitMapper;
+    private final ChildAttendanceMapper childAttendanceMapper;
+    private final TrainerAttendanceMapper trainerAttendanceMapper;
+
+    public TrainingUnitDto getTrainingUnit(Long id) {
+<span class="nc" id="L52">        TrainingUnit trainingUnit = trainingUnitRepository.findById(id)</span>
+<span class="nc" id="L53">                .orElseThrow(() -&gt; new TrainingUnitException(&quot;Training Unit with ID &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc" id="L55">        return trainingUnitMapper.toDto(trainingUnit);</span>
+    }
+
+    public TrainingUnitDto updateDescription(Long id, String description) {
+<span class="nc" id="L59">        TrainingUnit trainingUnit = trainingUnitRepository.findById(id)</span>
+<span class="nc" id="L60">                .orElseThrow(() -&gt; new TrainingUnitException(&quot;Training Unit with ID &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc" id="L62">        trainingUnit.setDescription(description);</span>
+<span class="nc" id="L63">        trainingUnitRepository.save(trainingUnit);</span>
+
+<span class="nc" id="L65">        return trainingUnitMapper.toDto(trainingUnit);</span>
+    }
+
+    public List&lt;ChildAttendanceDto&gt; getChildAttendances(Long id) {
+<span class="nc" id="L69">        TrainingUnit trainingUnit = trainingUnitRepository.findById(id)</span>
+<span class="nc" id="L70">                .orElseThrow(() -&gt; new TrainingUnitException(&quot;Training Unit with ID &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc" id="L72">        List&lt;ChildAttendance&gt; childAttendances = trainingUnit.getChildAttendances();</span>
+
+<span class="nc" id="L74">        return childAttendanceMapper.toDtoList(childAttendances);</span>
+    }
+
+    public List&lt;TrainerAttendanceDto&gt; getTrainerAttendances(Long id) {
+<span class="nc" id="L78">        TrainingUnit trainingUnit = trainingUnitRepository.findById(id)</span>
+<span class="nc" id="L79">                .orElseThrow(() -&gt; new TrainingUnitException(&quot;Training Unit with ID &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc" id="L81">        List&lt;TrainerAttendance&gt; trainerAttendances = trainingUnit.getTrainerAttendances();</span>
+
+<span class="nc" id="L83">        return trainerAttendanceMapper.toDtoList(trainerAttendances);</span>
+    }
+
+
+//    @Scheduled(cron = &quot;0 20 4 * * SUN&quot;) // s,m,h,dayOfMonth,month,dayOfWeek
+    public void createWeeklyTrainingUnits() {
+<span class="nc" id="L89">        List&lt;Training&gt; trainings = trainingRepository.findAll();</span>
+<span class="nc" id="L90">        LocalDate now = LocalDate.now();</span>
+
+<span class="nc" id="L92">        List&lt;TrainingUnit&gt; activeTrainingUnits = trainingUnitRepository.findByCurrentIsTrue();</span>
+<span class="nc" id="L93">        activeTrainingUnits.forEach(unit -&gt; unit.setCurrent(false));</span>
+<span class="nc" id="L94">        trainingUnitRepository.saveAll(activeTrainingUnits);</span>
+
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        for (Training training : trainings) {</span>
+<span class="nc" id="L97">            LocalDate trainingDate = now.with(TemporalAdjusters.next(training.getDayOfWeek()));</span>
+<span class="nc" id="L98">            List&lt;Trainer&gt; trainers = training.getTrainers();</span>
+<span class="nc" id="L99">            List&lt;Child&gt; children = training.getChildren();</span>
+
+<span class="nc" id="L101">            TrainingUnit trainingUnit = new TrainingUnit();</span>
+<span class="nc" id="L102">            trainingUnit.setDate(trainingDate);</span>
+<span class="nc" id="L103">            trainingUnit.setCurrent(true);</span>
+<span class="nc" id="L104">            trainingUnit.setTraining(training);</span>
+<span class="nc" id="L105">            training.addTrainingUnit(trainingUnit);</span>
+
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            for (Trainer trainer : trainers) {</span>
+<span class="nc" id="L108">                TrainerAttendance trainerAttendance = new TrainerAttendance();</span>
+<span class="nc" id="L109">                trainerAttendance.setTrainer(trainer);</span>
+<span class="nc" id="L110">                trainer.addTrainerAttendance(trainerAttendance);</span>
+
+<span class="nc" id="L112">                trainerAttendance.setTrainingUnit(trainingUnit);</span>
+<span class="nc" id="L113">                trainingUnit.addTrainerAttendance(trainerAttendance);</span>
+
+<span class="nc" id="L115">                trainerAttendance.setPresent(false);</span>
+
+<span class="nc" id="L117">                trainerAttendanceRepository.save(trainerAttendance);</span>
+<span class="nc" id="L118">                userRepository.save(trainer);</span>
+<span class="nc" id="L119">            }</span>
+
+<span class="nc bnc" id="L121" title="All 2 branches missed.">            for (Child child : children) {</span>
+<span class="nc" id="L122">                ChildAttendance childAttendance = new ChildAttendance();</span>
+<span class="nc" id="L123">                childAttendance.setChild(child);</span>
+<span class="nc" id="L124">                child.addChildAttendance(childAttendance);</span>
+
+<span class="nc" id="L126">                childAttendance.setTrainingUnit(trainingUnit);</span>
+<span class="nc" id="L127">                trainingUnit.addChildAttendance(childAttendance);</span>
+
+<span class="nc" id="L129">                childAttendance.setPresent(false);</span>
+
+<span class="nc" id="L131">                childAttendanceRepository.save(childAttendance);</span>
+<span class="nc" id="L132">                childRepository.save(child);</span>
+<span class="nc" id="L133">            }</span>
+
+<span class="nc" id="L135">            trainingUnitRepository.save(trainingUnit);</span>
+<span class="nc" id="L136">            trainingRepository.save(training);</span>
+<span class="nc" id="L137">        }</span>
+<span class="nc" id="L138">        System.out.println(&quot;================= TRAINING UNITS GENERATED =================&quot;);</span>
+<span class="nc" id="L139">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

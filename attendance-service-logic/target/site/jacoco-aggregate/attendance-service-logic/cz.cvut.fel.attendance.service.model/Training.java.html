@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>Training.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">attendance-service-logic</a> &gt; <a href="../index.html" class="el_bundle">attendance-service-logic</a> &gt; <a href="index.source.html" class="el_package">cz.cvut.fel.attendance.service.model</a> &gt; <span class="el_source">Training.java</span></div><h1>Training.java</h1><pre class="source lang-java linenums">package cz.cvut.fel.attendance.service.model;
+
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Table(name = &quot;training&quot;)
+@Entity
+<span class="nc" id="L31">@NoArgsConstructor</span>
+<span class="nc" id="L32">@Setter</span>
+@Getter
+public class Training {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="nc" id="L38">    private Long id;</span>
+
+<span class="nc" id="L40">    @ManyToMany</span>
+    @JoinTable(
+            name = &quot;trainers_in_training&quot;,
+            joinColumns = @JoinColumn(name = &quot;training_id&quot;),
+            inverseJoinColumns = @JoinColumn(name = &quot;trainer_id&quot;)
+    )
+
+<span class="nc" id="L47">    private List&lt;Trainer&gt; trainers = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L49">    @OneToMany(mappedBy = &quot;training&quot;)</span>
+<span class="nc" id="L50">    private List&lt;Child&gt; children = new ArrayList&lt;&gt;();</span>
+
+    @ManyToOne
+    @JoinColumn(name = &quot;school_id&quot;)
+<span class="nc" id="L54">    private School school;</span>
+
+<span class="nc" id="L56">    @OneToMany(mappedBy = &quot;training&quot;)</span>
+<span class="nc" id="L57">    private List&lt;TrainingUnit&gt; trainingUnits = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L59">    private String name;</span>
+
+    @Enumerated(EnumType.STRING)
+<span class="nc" id="L62">    private DayOfWeek dayOfWeek;</span>
+
+<span class="nc" id="L64">    private LocalTime startTime;</span>
+
+<span class="nc" id="L66">    private LocalTime endTime;</span>
+
+<span class="nc" id="L68">    private String schoolYear;</span>
+
+<span class="nc" id="L70">    private int price;</span>
+
+<span class="nc" id="L72">    private int capacity;</span>
+
+    @ElementCollection
+    @CollectionTable(name = &quot;training_holidays&quot;, joinColumns = @JoinColumn(name = &quot;training_id&quot;))
+    @Column(name = &quot;holiday_date&quot;)
+<span class="nc" id="L77">    private List&lt;LocalDate&gt; holidays;</span>
+
+<span class="nc" id="L79">    public Training(String name, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, String schoolYear, int price, int capacity) {</span>
+<span class="nc" id="L80">        this.name = name;</span>
+<span class="nc" id="L81">        this.dayOfWeek = dayOfWeek;</span>
+<span class="nc" id="L82">        this.startTime = startTime;</span>
+<span class="nc" id="L83">        this.endTime = endTime;</span>
+<span class="nc" id="L84">        this.schoolYear = schoolYear;</span>
+<span class="nc" id="L85">        this.price = price;</span>
+<span class="nc" id="L86">        this.capacity = capacity;</span>
+<span class="nc" id="L87">    }</span>
+
+    public boolean addTrainer(Trainer trainer) {
+<span class="nc bnc" id="L90" title="All 2 branches missed.">        if (!this.trainers.contains(trainer)) {</span>
+<span class="nc" id="L91">            this.trainers.add(trainer);</span>
+<span class="nc" id="L92">            return true;</span>
+        }
+<span class="nc" id="L94">        return false;</span>
+    }
+
+    public boolean removeTrainer(Trainer trainer) {
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        if (this.trainers.contains(trainer)) {</span>
+<span class="nc" id="L99">            this.trainers.remove(trainer);</span>
+<span class="nc" id="L100">            return true;</span>
+        }
+<span class="nc" id="L102">        return false;</span>
+    }
+
+    public boolean addChild(Child child) {
+<span class="nc bnc" id="L106" title="All 2 branches missed.">        if (!this.children.contains(child)) {</span>
+<span class="nc" id="L107">            this.children.add(child);</span>
+<span class="nc" id="L108">            return true;</span>
+        }
+<span class="nc" id="L110">        return false;</span>
+    }
+
+    public boolean removeChild(Child child) {
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        if (this.children.contains(child)) {</span>
+<span class="nc" id="L115">            this.children.remove(child);</span>
+<span class="nc" id="L116">            return true;</span>
+        }
+<span class="nc" id="L118">        return false;</span>
+    }
+
+    public void addHoliday(LocalDate date) {
+<span class="nc" id="L122">        this.holidays.add(date);</span>
+<span class="nc" id="L123">    }</span>
+
+    public void addTrainingUnit(TrainingUnit trainingUnit) {
+<span class="nc" id="L126">        this.trainingUnits.add(trainingUnit);</span>
+<span class="nc" id="L127">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

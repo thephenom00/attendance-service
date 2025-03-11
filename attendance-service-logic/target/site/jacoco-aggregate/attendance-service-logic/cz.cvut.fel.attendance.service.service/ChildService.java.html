@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ChildService.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">attendance-service-logic</a> &gt; <a href="../index.html" class="el_bundle">attendance-service-logic</a> &gt; <a href="index.source.html" class="el_package">cz.cvut.fel.attendance.service.service</a> &gt; <span class="el_source">ChildService.java</span></div><h1>ChildService.java</h1><pre class="source lang-java linenums">package cz.cvut.fel.attendance.service.service;
+
+import cz.cvut.fel.attendance.service.mappers.ChildMapper;
+import cz.cvut.fel.attendance.service.model.Child;
+import cz.cvut.fel.attendance.service.model.Event;
+import cz.cvut.fel.attendance.service.model.Parent;
+import cz.cvut.fel.attendance.service.model.Training;
+import cz.cvut.fel.attendance.service.model.User;
+import cz.cvut.fel.attendance.service.repository.ChildRepository;
+import cz.cvut.fel.attendance.service.repository.EventRepository;
+import cz.cvut.fel.attendance.service.repository.TrainingRepository;
+import cz.cvut.fel.attendance.service.repository.UserRepository;
+import cz.fel.cvut.attendance.service.exception.ChildException;
+import cz.fel.cvut.attendance.service.exception.EventException;
+import cz.fel.cvut.attendance.service.exception.ParentException;
+import cz.fel.cvut.attendance.service.exception.TrainingException;
+import cz.fel.cvut.attendance.service.model.ChildDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+<span class="nc" id="L25">@RequiredArgsConstructor</span>
+public class ChildService {
+
+    private final ChildRepository childRepository;
+
+    private final TrainingRepository trainingRepository;
+
+    private final EventRepository eventRepository;
+
+    private final UserRepository userRepository;
+
+    private final ChildMapper childMapper;
+
+    public ChildDto addChildToTraining(Long id) {
+<span class="nc" id="L39">        Child child = childRepository.findById(id)</span>
+<span class="nc" id="L40">                .orElseThrow(() -&gt; new ChildException(&quot;Child with ID &quot; + id + &quot; not found.&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc" id="L42">        Training requestedTraining = trainingRepository.findById(child.getRequestedTrainingId())</span>
+<span class="nc" id="L43">                .orElseThrow(() -&gt; new TrainingException(&quot;Training with ID &quot; + child.getRequestedTrainingId() + &quot; not found.&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        if (!requestedTraining.addChild(child)) {</span>
+<span class="nc" id="L46">            throw new TrainingException(&quot;Child is already registered to this training.&quot;, HttpStatus.CONFLICT);</span>
+        }
+
+<span class="nc" id="L49">        child.setTraining(requestedTraining);</span>
+<span class="nc" id="L50">        child.setRequestedTrainingId(null);</span>
+
+<span class="nc" id="L52">        childRepository.save(child);</span>
+<span class="nc" id="L53">        trainingRepository.save(requestedTraining);</span>
+
+<span class="nc" id="L55">        return childMapper.toDto(child);</span>
+    }
+
+    public void removeChildFromTraining(Long childId, Long trainingId) {
+<span class="nc" id="L59">        Child child = childRepository.findById(childId)</span>
+<span class="nc" id="L60">                .orElseThrow(() -&gt; new ChildException(&quot;Child with ID &quot; + childId + &quot; not found.&quot;, HttpStatus.NOT_FOUND));</span>
+<span class="nc" id="L61">        Training training = trainingRepository.findById(trainingId)</span>
+<span class="nc" id="L62">                .orElseThrow(() -&gt; new TrainingException(&quot;Training with ID &quot; + trainingId + &quot; not found. &quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (!training.removeChild(child)) {</span>
+<span class="nc" id="L65">            throw new TrainingException(&quot;Child is was not registered to this Training&quot;, HttpStatus.FORBIDDEN);</span>
+        }
+<span class="nc" id="L67">        child.setTraining(null);</span>
+
+<span class="nc" id="L69">        childRepository.save(child);</span>
+<span class="nc" id="L70">        trainingRepository.save(training);</span>
+<span class="nc" id="L71">    }</span>
+
+
+    public ChildDto registerChildToEvent(Long childId, Long eventId) {
+<span class="nc" id="L75">        Child child = childRepository.findById(childId)</span>
+<span class="nc" id="L76">                .orElseThrow(() -&gt; new ChildException(&quot;Child with ID &quot; + childId + &quot; not found.&quot;, HttpStatus.NOT_FOUND));</span>
+<span class="nc" id="L77">        Event event = eventRepository.findById(eventId)</span>
+<span class="nc" id="L78">                .orElseThrow(() -&gt; new EventException(&quot;Event with ID &quot; + eventId + &quot; not found. &quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc bnc" id="L80" title="All 4 branches missed.">        if (!child.addEvent(event) &amp;&amp; !event.addChild(child)) {</span>
+<span class="nc" id="L81">            throw new EventException(&quot;Child is already registered to this Event&quot;, HttpStatus.CONFLICT);</span>
+        }
+
+<span class="nc" id="L84">        childRepository.save(child);</span>
+<span class="nc" id="L85">        eventRepository.save(event);</span>
+
+<span class="nc" id="L87">        return childMapper.toDto(child);</span>
+    }
+
+    public void unregisterChildFromEvent(Long childId, Long eventId) {
+<span class="nc" id="L91">        Child child = childRepository.findById(childId)</span>
+<span class="nc" id="L92">                .orElseThrow(() -&gt; new ChildException(&quot;Child with ID &quot; + childId + &quot; not found.&quot;, HttpStatus.NOT_FOUND));</span>
+<span class="nc" id="L93">        Event event = eventRepository.findById(eventId)</span>
+<span class="nc" id="L94">                .orElseThrow(() -&gt; new EventException(&quot;Event with ID &quot; + eventId + &quot; not found. &quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc bnc" id="L96" title="All 4 branches missed.">        if (!child.removeEvent(event) &amp;&amp; !event.removeChild(child)) {</span>
+<span class="nc" id="L97">            throw new EventException(&quot;Child is was not registered to this Event&quot;, HttpStatus.FORBIDDEN);</span>
+        }
+
+<span class="nc" id="L100">        childRepository.save(child);</span>
+<span class="nc" id="L101">        eventRepository.save(event);</span>
+<span class="nc" id="L102">    }</span>
+
+    public ChildDto createChild(ChildDto childDto) {
+<span class="nc" id="L105">        User user = userRepository.findById(childDto.parentId())</span>
+<span class="nc" id="L106">                .orElseThrow(() -&gt; new ParentException(&quot;User with ID: &quot; + childDto.parentId() + &quot; is not found.&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (!(user instanceof Parent parent)) {</span>
+<span class="nc" id="L109">            throw new ParentException(&quot;User with ID: &quot; + childDto.parentId() + &quot; is not a Parent.&quot;, HttpStatus.BAD_REQUEST);</span>
+        }
+
+<span class="nc" id="L112">        Child child = childMapper.toEntity(childDto);</span>
+
+<span class="nc" id="L114">        if (childRepository.existsByFirstName(child.getFirstName()) &amp;</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">                childRepository.existsByLastName(child.getLastName())) {</span>
+<span class="nc" id="L116">            throw new ChildException(&quot;Child &quot; + child.getFirstName() + &quot; &quot; + child.getLastName() + &quot; is already registered.&quot;,</span>
+                    HttpStatus.CONFLICT);
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        } else if (childRepository.existsByBirthNumber(child.getBirthNumber())) {</span>
+<span class="nc" id="L119">            throw new ChildException(&quot;Child with birth number &quot; + child.getBirthNumber() + &quot; is already registered.&quot;,</span>
+                    HttpStatus.CONFLICT);
+        }
+
+<span class="nc" id="L123">        parent.addChild(child);</span>
+<span class="nc" id="L124">        child.setParent(parent);</span>
+
+<span class="nc" id="L126">        userRepository.save(parent);</span>
+<span class="nc" id="L127">        childRepository.save(child);</span>
+<span class="nc" id="L128">        return childMapper.toDto(child);</span>
+    }
+
+    public ChildDto getChild(Long id) {
+<span class="nc" id="L132">        Child child = childRepository.findById(id)</span>
+<span class="nc" id="L133">                .orElseThrow(() -&gt; new ChildException(&quot;Child with ID &quot; + id + &quot; not found.&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc" id="L135">        return childMapper.toDto(child);</span>
+    }
+
+    public List&lt;ChildDto&gt; getChildren() {
+<span class="nc" id="L139">        List&lt;Child&gt; children = childRepository.findAll();</span>
+
+<span class="nc" id="L141">        return childMapper.toDtoList(children);</span>
+    }
+
+    public void deleteChild(Long id) {
+<span class="nc" id="L145">        Child child = childRepository.findById(id)</span>
+<span class="nc" id="L146">                .orElseThrow(() -&gt; new ChildException(&quot;Child with ID &quot; + id + &quot; not found.&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc" id="L148">        childRepository.delete(child);</span>
+<span class="nc" id="L149">    }</span>
+
+    public ChildDto updateChild(Long id, ChildDto childDto) {
+<span class="nc" id="L152">        Child child = childRepository.findById(id)</span>
+<span class="nc" id="L153">                .orElseThrow(() -&gt; new ChildException(&quot;Child with ID &quot; + id + &quot; not found.&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc" id="L155">        childMapper.updateChildFromDto(childDto, child);</span>
+
+<span class="nc" id="L157">        childRepository.save(child);</span>
+<span class="nc" id="L158">        return childMapper.toDto(child);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

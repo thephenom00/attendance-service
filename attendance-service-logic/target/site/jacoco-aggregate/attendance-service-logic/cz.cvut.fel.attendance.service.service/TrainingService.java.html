@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>TrainingService.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">attendance-service-logic</a> &gt; <a href="../index.html" class="el_bundle">attendance-service-logic</a> &gt; <a href="index.source.html" class="el_package">cz.cvut.fel.attendance.service.service</a> &gt; <span class="el_source">TrainingService.java</span></div><h1>TrainingService.java</h1><pre class="source lang-java linenums">package cz.cvut.fel.attendance.service.service;
+
+import cz.cvut.fel.attendance.service.mappers.ChildMapper;
+import cz.cvut.fel.attendance.service.mappers.TrainingMapper;
+import cz.cvut.fel.attendance.service.mappers.TrainingUnitMapper;
+import cz.cvut.fel.attendance.service.model.Child;
+import cz.cvut.fel.attendance.service.model.School;
+import cz.cvut.fel.attendance.service.model.Training;
+import cz.cvut.fel.attendance.service.model.TrainingUnit;
+import cz.cvut.fel.attendance.service.repository.SchoolRepository;
+import cz.cvut.fel.attendance.service.repository.TrainingRepository;
+import cz.cvut.fel.attendance.service.repository.TrainingUnitRepository;
+import cz.fel.cvut.attendance.service.exception.SchoolException;
+import cz.fel.cvut.attendance.service.exception.TrainingException;
+import cz.fel.cvut.attendance.service.model.ChildDto;
+import cz.fel.cvut.attendance.service.model.TrainingDto;
+import cz.fel.cvut.attendance.service.model.TrainingUnitDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+<span class="nc" id="L26">@RequiredArgsConstructor</span>
+@Transactional
+public class TrainingService {
+
+    private final TrainingRepository trainingRepository;
+
+    private final SchoolRepository schoolRepository;
+
+    private final TrainingUnitRepository trainingUnitRepository;
+
+    private final TrainingMapper trainingMapper;
+
+    private final ChildMapper childMapper;
+
+    private final TrainingUnitMapper trainingUnitMapper;
+
+    public TrainingDto createTraining(TrainingDto trainingDto, Long schoolId) {
+<span class="nc" id="L43">        School school = schoolRepository.findById(schoolId).orElseThrow(() -&gt; new SchoolException(&quot;School with ID &quot; + schoolId + &quot; not found&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc" id="L45">        Training training = trainingMapper.toEntity(trainingDto);</span>
+
+<span class="nc" id="L47">        training.setSchool(school);</span>
+<span class="nc" id="L48">        school.addTraining(training);</span>
+
+<span class="nc" id="L50">        Training savedTraining = trainingRepository.save(training);</span>
+
+<span class="nc" id="L52">        return trainingMapper.toDto(savedTraining);</span>
+    }
+
+    public TrainingDto getTraining(Long id) {
+<span class="nc" id="L56">        Training training = trainingRepository.findById(id)</span>
+<span class="nc" id="L57">                .orElseThrow(() -&gt; new TrainingException(&quot;Training with ID &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc" id="L59">        return trainingMapper.toDto(training);</span>
+    }
+
+    public List&lt;TrainingDto&gt; getTrainings() {
+<span class="nc" id="L63">        List&lt;Training&gt; trainings = trainingRepository.findAll();</span>
+
+<span class="nc" id="L65">        return trainingMapper.toDtoList(trainings);</span>
+    }
+
+    public TrainingUnitDto getCurrentTrainingUnit(Long id) {
+<span class="nc" id="L69">        Training training = trainingRepository.findById(id)</span>
+<span class="nc" id="L70">                .orElseThrow(() -&gt; new TrainingException(&quot;Training with ID &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc" id="L72">        List&lt;TrainingUnit&gt; trainingUnits = training.getTrainingUnits();</span>
+<span class="nc" id="L73">        TrainingUnit currentTrainingUnit = trainingUnits.stream()</span>
+<span class="nc" id="L74">                .filter(t -&gt; t.isCurrent())</span>
+<span class="nc" id="L75">                .findFirst()</span>
+<span class="nc" id="L76">                .orElseThrow(() -&gt; new TrainingException(&quot;No active training unit found&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc" id="L78">        return trainingUnitMapper.toDto(currentTrainingUnit);</span>
+    }
+
+    public List&lt;TrainingUnitDto&gt; getPastTrainingUnits(Long id) {
+<span class="nc" id="L82">        Training training = trainingRepository.findById(id)</span>
+<span class="nc" id="L83">                .orElseThrow(() -&gt; new TrainingException(&quot;Training with ID &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc" id="L85">        List&lt;TrainingUnit&gt; trainingUnits = training.getTrainingUnits();</span>
+<span class="nc" id="L86">        List&lt;TrainingUnit&gt; pastTrainingUnits = trainingUnits.stream()</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">                .filter(t -&gt; !t.isCurrent())</span>
+<span class="nc" id="L88">                .toList();</span>
+
+<span class="nc" id="L90">        return trainingUnitMapper.toDtoList(pastTrainingUnits);</span>
+    }
+
+    public List&lt;TrainingUnitDto&gt; getTrainingUnits(Long id) {
+<span class="nc" id="L94">        Training training = trainingRepository.findById(id)</span>
+<span class="nc" id="L95">                .orElseThrow(() -&gt; new TrainingException(&quot;Training with ID &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND));</span>
+
+<span class="nc" id="L97">        return trainingUnitMapper.toDtoList(training.getTrainingUnits());</span>
+    }
+
+    public void deleteTraining(Long id) {
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        if (!trainingRepository.existsById(id)) {</span>
+<span class="nc" id="L102">            throw new TrainingException(&quot;Training with ID &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
+        }
+
+<span class="nc" id="L105">        trainingRepository.deleteById(id);</span>
+<span class="nc" id="L106">    }</span>
+
+    public TrainingDto updateTraining(Long id, TrainingDto trainingDto) {
+<span class="nc" id="L109">        Training training = trainingRepository.findById(id)</span>
+<span class="nc" id="L110">                .orElseThrow(() -&gt; new TrainingException(&quot;Training with ID &quot; + id + &quot; not found.&quot;,</span>
+                        HttpStatus.NOT_FOUND));
+
+<span class="nc" id="L113">        trainingMapper.updateTrainingFromDto(trainingDto, training);</span>
+
+<span class="nc" id="L115">        trainingRepository.save(training);</span>
+<span class="nc" id="L116">        return trainingMapper.toDto(training);</span>
+    }
+
+    public List&lt;ChildDto&gt; getChildren(Long id) {
+<span class="nc" id="L120">        Training training = trainingRepository.findById(id)</span>
+<span class="nc" id="L121">                .orElseThrow(() -&gt; new TrainingException(&quot;Training with ID &quot; + id + &quot; not found.&quot;,</span>
+                        HttpStatus.NOT_FOUND));
+
+<span class="nc" id="L124">        List&lt;Child&gt; children = training.getChildren();</span>
+
+<span class="nc" id="L126">        return childMapper.toDtoList(children);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
