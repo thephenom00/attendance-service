@@ -1,7 +1,7 @@
 package cz.cvut.fel.attendance.service.enums;
 
 public enum Role {
-    TRAINER,
-    PARENT,
-    ADMIN
+    ROLE_TRAINER,
+    ROLE_PARENT,
+    ROLE_ADMIN
 }

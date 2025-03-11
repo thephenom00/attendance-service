@@ -2,6 +2,7 @@ package cz.fel.cvut.attendance.service.api;
 
 import cz.fel.cvut.attendance.service.model.ChildAttendanceDto;
 import cz.fel.cvut.attendance.service.model.ParentContactDto;
+import cz.fel.cvut.attendance.service.model.TrainerAttendanceDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,8 +13,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequestMapping("/childAttendance")
 public interface ChildAttendanceApi {
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{id}/markAttendance")
-    ResponseEntity<ChildAttendanceDto> markChildAttendance(@PathVariable Long id);
+    @PatchMapping("/{id}/markPresent")
+    ResponseEntity<ChildAttendanceDto> markPresent(@PathVariable Long id);
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/markAbsent")
+    ResponseEntity<ChildAttendanceDto> markAbsent(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}/parentContact")

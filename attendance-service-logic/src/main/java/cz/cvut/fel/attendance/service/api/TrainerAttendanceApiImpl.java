@@ -14,7 +14,12 @@ public class TrainerAttendanceApiImpl implements TrainerAttendanceApi {
     private final TrainerAttendanceService trainerAttendanceService;
 
     @Override
-    public ResponseEntity<TrainerAttendanceDto> markAttendance(Long id) {
-        return ResponseEntity.ok(trainerAttendanceService.markAttendance(id));
+    public ResponseEntity<TrainerAttendanceDto> markPresent(Long id) {
+        return ResponseEntity.ok(trainerAttendanceService.markPresent(id));
+    }
+
+    @Override
+    public ResponseEntity<TrainerAttendanceDto> markAbsent(Long id) {
+        return ResponseEntity.ok(trainerAttendanceService.markAbsent(id));
     }
 }

@@ -7,6 +7,9 @@ public record ChildDto(
         String firstName,
         String lastName,
         LocalDate dateOfBirth,
+        String street,
+        String city,
+        int zip,
         String birthNumber,
         Long parentId,
         Long requestedTrainingId

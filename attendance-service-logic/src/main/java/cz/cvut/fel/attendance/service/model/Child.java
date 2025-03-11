@@ -57,14 +57,23 @@ public class Child {
 
     private LocalDate dateOfBirth;
 
+    private String street;
+
+    private String city;
+
+    private int zip;
+
     private String birthNumber;
 
     private Long requestedTrainingId;
 
-    public Child(String firstName, String lastName, LocalDate dateOfBirth, String birthNumber, Long requestedTrainingId) {
+    public Child(String firstName, String lastName, LocalDate dateOfBirth, String street, String city, int zip, String birthNumber, Long requestedTrainingId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
+        this.street = street;
+        this.city = city;
+        this.zip = zip;
         this.birthNumber = birthNumber;
         this.requestedTrainingId = requestedTrainingId;
     }

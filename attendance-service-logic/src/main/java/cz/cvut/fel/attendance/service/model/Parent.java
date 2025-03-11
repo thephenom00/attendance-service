@@ -1,6 +1,7 @@
 package cz.cvut.fel.attendance.service.model;
 
 import cz.cvut.fel.attendance.service.enums.Role;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -18,22 +19,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "parent")
+@DiscriminatorValue("PARENT")
 public class Parent extends User {
-
-    private String street;
-
-    private String city;
-
-    private int zip;
 
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Child> children = new ArrayList<>();
 
-    public Parent(String firstName, String lastName, String email, String phoneNumber, String password, String street, String city, int zip, Role role) {
-        super(firstName, lastName, email, phoneNumber, password, role);
-        this.street = street;
-        this.city = city;
-        this.zip = zip;
+    public Parent(String firstName, String lastName, String email, String phoneNumber, String password) {
+        super(firstName, lastName, email, phoneNumber, password, Role.ROLE_PARENT);
     }
 
     public void addChild(Child child) {

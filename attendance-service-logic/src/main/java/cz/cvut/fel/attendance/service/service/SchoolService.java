@@ -39,9 +39,12 @@ public class SchoolService {
     }
 
     public void deleteSchool(Long id) {
-        if (!schoolRepository.existsById(id)) {
-            throw new SchoolException("School with ID: " + id + " is not existing.",
-                    HttpStatus.NOT_FOUND);
+        School school = schoolRepository.findById(id)
+                .orElseThrow(() -> new SchoolException("School with ID: " + id + " is not existing.",
+                        HttpStatus.NOT_FOUND));
+
+        for (Training training : school.getTrainings()) {
+            training.setSchool(null);
         }
 
         schoolRepository.deleteById(id);

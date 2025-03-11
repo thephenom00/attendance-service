@@ -185,7 +185,7 @@ public class test {
         Training training = new Training("Beginners", DayOfWeek.MONDAY, LocalTime.now(), LocalTime.now(), "2024/2025", 2100, 20);
         training = trainingRepository.save(training);
 
-        Child child = new Child("Karel", "Novak", LocalDate.of(2023, 2, 2), "321", training.getId());
+        Child child = new Child("Karel", "Novak", LocalDate.of(2023, 2, 2), "Street", "City", 123,"321", training.getId());
         child = childRepository.save(child);
 
         mvc.perform(patch("/child/" + child.getId() + "/addToTraining" ));

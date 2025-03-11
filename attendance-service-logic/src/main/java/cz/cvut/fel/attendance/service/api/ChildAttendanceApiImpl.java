@@ -15,8 +15,13 @@ public class ChildAttendanceApiImpl implements ChildAttendanceApi {
     private final ChildAttendanceService childAttendanceService;
 
     @Override
-    public ResponseEntity<ChildAttendanceDto> markChildAttendance(Long id) {
-        return ResponseEntity.ok(childAttendanceService.markChildAttendance(id));
+    public ResponseEntity<ChildAttendanceDto> markPresent(Long id) {
+        return ResponseEntity.ok(childAttendanceService.markPresent(id));
+    }
+
+    @Override
+    public ResponseEntity<ChildAttendanceDto> markAbsent(Long id) {
+        return ResponseEntity.ok(childAttendanceService.markAbsent(id));
     }
 
     @Override

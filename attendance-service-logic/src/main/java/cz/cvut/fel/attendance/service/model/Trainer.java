@@ -32,7 +32,7 @@ public class Trainer extends User {
     private String description;
 
     public Trainer(String firstName, String lastName, String email, String phoneNumber, String password) {
-        super(firstName, lastName, email, phoneNumber, password, Role.TRAINER);
+        super(firstName, lastName, email, phoneNumber, password, Role.ROLE_TRAINER);
     }
 
     public boolean addTraining(Training training) {

@@ -16,11 +16,22 @@ public class TrainerAttendanceService {
     private final TrainerAttendanceRepository trainerAttendanceRepository;
     private final TrainerAttendanceMapper trainerAttendanceMapper;
 
-    public TrainerAttendanceDto markAttendance(Long id) {
+    public TrainerAttendanceDto markPresent(Long id) {
         TrainerAttendance trainerAttendance = trainerAttendanceRepository.findById(id)
                 .orElseThrow(() -> new AttendanceException("Attendance with ID " + id + " not found", HttpStatus.NOT_FOUND));
 
-        trainerAttendance.setPresent(!trainerAttendance.isPresent());
+        trainerAttendance.setPresent(true);
+
+        trainerAttendanceRepository.save(trainerAttendance);
+
+        return trainerAttendanceMapper.toDto(trainerAttendance);
+    }
+
+    public TrainerAttendanceDto markAbsent(Long id) {
+        TrainerAttendance trainerAttendance = trainerAttendanceRepository.findById(id)
+                .orElseThrow(() -> new AttendanceException("Attendance with ID " + id + " not found", HttpStatus.NOT_FOUND));
+
+        trainerAttendance.setPresent(false);
 
         trainerAttendanceRepository.save(trainerAttendance);
 

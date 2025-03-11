@@ -22,11 +22,22 @@ public class ChildAttendanceService {
     private final ChildAttendanceMapper childAttendanceMapper;
 
 
-    public ChildAttendanceDto markChildAttendance(Long id) {
+    public ChildAttendanceDto markPresent(Long id) {
         ChildAttendance childAttendance = childAttendanceRepository.findById(id)
                 .orElseThrow(() -> new AttendanceException("Attendance with ID " + id + " not found", HttpStatus.NOT_FOUND));
 
-        childAttendance.setPresent(!childAttendance.isPresent());
+        childAttendance.setPresent(true);
+
+        childAttendanceRepository.save(childAttendance);
+
+        return childAttendanceMapper.toDto(childAttendance);
+    }
+
+    public ChildAttendanceDto markAbsent(Long id) {
+        ChildAttendance childAttendance = childAttendanceRepository.findById(id)
+                .orElseThrow(() -> new AttendanceException("Attendance with ID " + id + " not found", HttpStatus.NOT_FOUND));
+
+        childAttendance.setPresent(false);
 
         childAttendanceRepository.save(childAttendance);
 

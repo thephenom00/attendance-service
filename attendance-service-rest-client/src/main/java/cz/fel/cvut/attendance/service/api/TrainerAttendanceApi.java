@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequestMapping("/trainerAttendance")
 public interface TrainerAttendanceApi {
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{id}/markAttendance")
-    ResponseEntity<TrainerAttendanceDto> markAttendance(@PathVariable Long id);
+    @PatchMapping("/{id}/markPresent")
+    ResponseEntity<TrainerAttendanceDto> markPresent(@PathVariable Long id);
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/markAbsent")
+    ResponseEntity<TrainerAttendanceDto> markAbsent(@PathVariable Long id);
 }
