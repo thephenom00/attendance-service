@@ -29,6 +29,7 @@ public class ChildApiImpl implements ChildApi {
     @Override
     public ResponseEntity<Void> removeChildFromTraining(Long childId, Long trainingId) {
         childService.removeChildFromTraining(childId, trainingId);
+
         return ResponseEntity.noContent().build();
     }
 
