@@ -60,23 +60,17 @@ public class DBinit {
 
             // Create School
             School school = new School(
-                    "Judo Academy", "123 Main Street", "Prague",
-                    "John Doe", "+420 123 456 789", "Enter via the side door"
+                    "ZŠ Štěnovice", "Školní 28", "Štěnovice",
+                    "Pavel Novák", "123456789", "Enter via the side door"
             );
             schoolRepository.save(school);
 
             // List of Trainings
             List<Training> trainings = List.of(
-                    new Training("1", DayOfWeek.MONDAY, LocalTime.of(17, 30),
+                    new Training("Začátečnící", DayOfWeek.MONDAY, LocalTime.of(17, 30),
                             LocalTime.of(19, 0), "2024/2025", 2300, 30),
-                    new Training("2", DayOfWeek.TUESDAY, LocalTime.of(16, 00),
-                            LocalTime.of(17, 30), "2024/2025", 2500, 25),
-                    new Training("3", DayOfWeek.WEDNESDAY, LocalTime.of(18, 00),
-                            LocalTime.of(19, 30), "2024/2025", 2700, 20),
-                    new Training("4", DayOfWeek.THURSDAY, LocalTime.of(17, 00),
-                            LocalTime.of(19, 00), "2024/2025", 3000, 15),
-                    new Training("5", DayOfWeek.FRIDAY, LocalTime.of(10, 00),
-                            LocalTime.of(11, 30), "2024/2025", 2000, 20)
+                    new Training("Pokročilí", DayOfWeek.TUESDAY, LocalTime.of(16, 00),
+                            LocalTime.of(17, 30), "2024/2025", 2500, 25)
             );
 
             // Assign School to Trainings

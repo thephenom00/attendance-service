@@ -2,14 +2,17 @@ package cz.cvut.fel.attendance.service.api;
 
 import cz.cvut.fel.attendance.service.config.JwtUtil;
 import cz.cvut.fel.attendance.service.model.User;
+import cz.cvut.fel.attendance.service.repository.UserRepository;
 import cz.cvut.fel.attendance.service.service.UserService;
 import cz.fel.cvut.attendance.service.api.UserApi;
+import cz.fel.cvut.attendance.service.exception.UserException;
 import cz.fel.cvut.attendance.service.model.auth.AuthResponse;
 import cz.fel.cvut.attendance.service.model.auth.LoginRequest;
 import cz.fel.cvut.attendance.service.model.auth.RefreshTokenRequestDto;
 import cz.fel.cvut.attendance.service.model.auth.RegisterRequest;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +28,7 @@ public class UserApiImpl implements UserApi {
     private final AuthenticationManager authenticationManager;
 
     private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
 
     @Override
     public ResponseEntity<AuthResponse> registerParent(RegisterRequest request) {
@@ -39,7 +43,7 @@ public class UserApiImpl implements UserApi {
         final String accessToken = jwtUtil.generateToken(userDetails);
         final String refreshToken = jwtUtil.generateRefreshToken(userDetails);
 
-        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, email));
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, "ROLE_PARENT"));
     }
 
     @Override
@@ -55,7 +59,7 @@ public class UserApiImpl implements UserApi {
         final String accessToken = jwtUtil.generateToken(userDetails);
         final String refreshToken = jwtUtil.generateRefreshToken(userDetails);
 
-        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, email));
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, "ROLE_TRAINER"));
     }
 
     @Override
@@ -72,21 +76,23 @@ public class UserApiImpl implements UserApi {
         final String accessToken = jwtUtil.generateToken(userDetails);
         final String refreshToken = jwtUtil.generateRefreshToken(userDetails);
 
-        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, user.getEmail()));
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, user.getRole().toString()));
     }
 
     @Override
     public ResponseEntity<AuthResponse> refreshToken(RefreshTokenRequestDto request) {
-        String username;
+        String email;
         try {
-            username = jwtUtil.extractUsername(request.getRefreshToken());
+            email = jwtUtil.extractUsername(request.getRefreshToken());
         } catch (Exception e) {
             throw new RuntimeException("Invalid refresh token.");
         }
 
-        UserDetails userDetails = userService.loadUserByUsername(username);
+        UserDetails userDetails = userService.loadUserByUsername(email);
 
         Claims claims = jwtUtil.getClaimsFromRefreshToken(request.getRefreshToken());
+
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new UserException("User not found.", HttpStatus.NOT_FOUND));
 
         if (!"refresh".equals(claims.get("type"))) {
             throw new RuntimeException("Invalid token type.");
@@ -97,8 +103,8 @@ public class UserApiImpl implements UserApi {
         }
 
         String newAccessToken = jwtUtil.generateToken(userDetails);
-        String newRefreshToken = jwtUtil.generateRefreshToken(userDetails); // Rotate refresh tokens
+        String newRefreshToken = jwtUtil.generateRefreshToken(userDetails);
 
-        return ResponseEntity.ok(new AuthResponse(newAccessToken, newRefreshToken, username));
+        return ResponseEntity.ok(new AuthResponse(newAccessToken, newRefreshToken, user.getRole().toString()));
     }
 }
