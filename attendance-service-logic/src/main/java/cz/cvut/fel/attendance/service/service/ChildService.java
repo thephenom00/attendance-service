@@ -35,6 +35,12 @@ public class ChildService {
 
     private final ChildMapper childMapper;
 
+    public List<ChildDto> getUnassignedChildren() {
+        List<Child> children = childRepository.findByRequestedTrainingIdIsNotNull();
+
+        return childMapper.toDtoList(children);
+    }
+
     public ChildDto addChildToTraining(Long id) {
         Child child = childRepository.findById(id)
                 .orElseThrow(() -> new ChildException("Child with ID " + id + " not found.", HttpStatus.NOT_FOUND));

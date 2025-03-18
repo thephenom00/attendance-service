@@ -6,15 +6,15 @@ import cz.cvut.fel.attendance.service.service.UserService;
 import cz.fel.cvut.attendance.service.api.UserApi;
 import cz.fel.cvut.attendance.service.model.auth.AuthResponse;
 import cz.fel.cvut.attendance.service.model.auth.LoginRequest;
+import cz.fel.cvut.attendance.service.model.auth.RefreshTokenRequestDto;
 import cz.fel.cvut.attendance.service.model.auth.RegisterRequest;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RestController;
-
-
 
 @RestController
 @RequiredArgsConstructor
@@ -36,10 +36,10 @@ public class UserApiImpl implements UserApi {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
         final UserDetails userDetails = userService.loadUserByUsername(email);
-
         final String accessToken = jwtUtil.generateToken(userDetails);
+        final String refreshToken = jwtUtil.generateRefreshToken(userDetails);
 
-        return ResponseEntity.ok(new AuthResponse(accessToken, email));
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, email));
     }
 
     @Override
@@ -52,10 +52,10 @@ public class UserApiImpl implements UserApi {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
         final UserDetails userDetails = userService.loadUserByUsername(email);
-
         final String accessToken = jwtUtil.generateToken(userDetails);
+        final String refreshToken = jwtUtil.generateRefreshToken(userDetails);
 
-        return ResponseEntity.ok(new AuthResponse(accessToken, email));
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, email));
     }
 
     @Override
@@ -70,7 +70,35 @@ public class UserApiImpl implements UserApi {
 
         final UserDetails userDetails = userService.loadUserByUsername(email);
         final String accessToken = jwtUtil.generateToken(userDetails);
+        final String refreshToken = jwtUtil.generateRefreshToken(userDetails);
 
-        return ResponseEntity.ok(new AuthResponse(accessToken, user.getEmail()));
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, user.getEmail()));
+    }
+
+    @Override
+    public ResponseEntity<AuthResponse> refreshToken(RefreshTokenRequestDto request) {
+        String username;
+        try {
+            username = jwtUtil.extractUsername(request.getRefreshToken());
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid refresh token.");
+        }
+
+        UserDetails userDetails = userService.loadUserByUsername(username);
+
+        Claims claims = jwtUtil.getClaimsFromRefreshToken(request.getRefreshToken());
+
+        if (!"refresh".equals(claims.get("type"))) {
+            throw new RuntimeException("Invalid token type.");
+        }
+
+        if (!jwtUtil.validateToken(request.getRefreshToken(), userDetails)) {
+            throw new RuntimeException("Refresh token expired or invalid.");
+        }
+
+        String newAccessToken = jwtUtil.generateToken(userDetails);
+        String newRefreshToken = jwtUtil.generateRefreshToken(userDetails); // Rotate refresh tokens
+
+        return ResponseEntity.ok(new AuthResponse(newAccessToken, newRefreshToken, username));
     }
 }

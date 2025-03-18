@@ -22,6 +22,11 @@ public class ChildApiImpl implements ChildApi {
     }
 
     @Override
+    public ResponseEntity<List<ChildDto>> getUnassignedChildren() {
+        return ResponseEntity.ok(childService.getUnassignedChildren());
+    }
+
+    @Override
     public ResponseEntity<ChildDto> addChildToTraining(Long id) {
         return ResponseEntity.ok(childService.addChildToTraining(id));
     }

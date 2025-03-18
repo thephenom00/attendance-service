@@ -2,6 +2,7 @@ package cz.fel.cvut.attendance.service.api;
 
 import cz.fel.cvut.attendance.service.model.auth.AuthResponse;
 import cz.fel.cvut.attendance.service.model.auth.LoginRequest;
+import cz.fel.cvut.attendance.service.model.auth.RefreshTokenRequestDto;
 import cz.fel.cvut.attendance.service.model.auth.RegisterRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,5 +24,10 @@ public interface UserApi {
     @PostMapping("/login")
     @ResponseBody
     ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request);
+
+    @PostMapping("/refresh")
+    @ResponseBody
+    ResponseEntity<AuthResponse> refreshToken(@RequestBody RefreshTokenRequestDto request);
+
 
 }

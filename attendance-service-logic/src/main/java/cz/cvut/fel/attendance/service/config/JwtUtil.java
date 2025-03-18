@@ -29,7 +29,8 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    private static final long JWT_TOKEN_VALIDITY = 24L * 60 * 60 * 1000 * 365; // 1 year
+    private static final long ACCESS_TOKEN_VALIDITY = 30L * 60 * 1000; // 30 minutes
+    private static final long REFRESH_TOKEN_VALIDITY = 30L * 24 * 60 * 60 * 1000; // 30 days
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -59,7 +60,13 @@ public class JwtUtil {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("type", "access");
-        return createToken(claims, userDetails.getUsername(), JWT_TOKEN_VALIDITY);
+        return createToken(claims, userDetails.getUsername(), ACCESS_TOKEN_VALIDITY);
+    }
+
+    public String generateRefreshToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("type", "refresh");
+        return createToken(claims, userDetails.getUsername(), REFRESH_TOKEN_VALIDITY);
     }
 
     private String createToken(Map<String, Object> claims, String subject, long validity) {
@@ -75,5 +82,13 @@ public class JwtUtil {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    }
+
+    public Claims getClaimsFromRefreshToken(String refreshToken) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretString.getBytes(StandardCharsets.UTF_8))
+                .build()
+                .parseClaimsJws(refreshToken)
+                .getBody();
     }
 }

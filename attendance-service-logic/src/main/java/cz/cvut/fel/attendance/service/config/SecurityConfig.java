@@ -52,14 +52,13 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
-//                        .requestMatchers(SecurityEndpoints.PUBLIC_URLS).permitAll()
-//                        .requestMatchers(SecurityEndpoints.AUTHENTICATED_URLS).hasAnyAuthority("ROLE_PARENT")
-//                        .requestMatchers(SecurityEndpoints.ADMIN_URLS).hasAuthority("ROLE_TRAINER")
-//                        .requestMatchers(SecurityEndpoints.MEMBER_URLS).hasAnyAuthority("ROLE_MEMBER", "ROLE_REGISTERED", "ROLE_ADMIN")
-//                        .anyRequest().authenticated()
-                        .anyRequest().permitAll()
+                        .requestMatchers(SecurityEndpoints.PUBLIC_URLS).permitAll()
+//                        .requestMatchers(SecurityEndpoints.PARENT_URLS).hasAnyAuthority("ROLE_PARENT")
+//                        .requestMatchers(SecurityEndpoints.TRAINER_URLS).hasAuthority("ROLE_TRAINER")
+//                        .requestMatchers(SecurityEndpoints.MULTI_ROLE_URLS).hasAnyAuthority("ROLE_PARENT", "ROLE_TRAINER")
+                        .anyRequest().hasAuthority("ROLE_ADMIN")
+//                        .anyRequest().permitAll() // remove
                 )
-//                .addFilterBefore(preAuthRegisterFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session

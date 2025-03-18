@@ -13,18 +13,16 @@ public class SecurityEndpoints {
             antMatcher(HttpMethod.POST,"/auth/**")
     );
 
-    final RequestMatcher AUTHENTICATED_URLS = new OrRequestMatcher(
-            antMatcher(HttpMethod.POST,"/school/create"),
-            antMatcher(HttpMethod.GET,"/school/**/trainings"),
-            antMatcher(HttpMethod.PATCH,"/school/**"),
-            antMatcher(HttpMethod.GET,"/school/**"),
-            antMatcher(HttpMethod.GET,"/school"),
-            antMatcher(HttpMethod.DELETE,"/school/**"),
-            antMatcher(HttpMethod.POST,"/training/create/**"),
-            antMatcher(HttpMethod.GET,"/training/**")
+    final RequestMatcher PARENT_URLS = new OrRequestMatcher(
+            antMatcher(HttpMethod.GET,"/school/**/trainings")
     );
 
-    final RequestMatcher ADMIN_URLS = new OrRequestMatcher(
-            antMatcher(HttpMethod.GET,"/training/**")
+    final RequestMatcher TRAINER_URLS = new OrRequestMatcher(
+            antMatcher(HttpMethod.GET,"/school/**")
+    );
+
+    final RequestMatcher MULTI_ROLE_URLS = new OrRequestMatcher(
+            antMatcher(HttpMethod.GET,"/training/**"),
+            antMatcher(HttpMethod.GET,"/training")
     );
 }

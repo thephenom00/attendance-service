@@ -22,6 +22,10 @@ public interface ChildApi {
     ResponseEntity<ChildDto> createChild(@RequestBody ChildDto childDto);
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/unassigned")
+    ResponseEntity<List<ChildDto>> getUnassignedChildren();
+
+    @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}/addToTraining")
     ResponseEntity<ChildDto> addChildToTraining(@PathVariable Long id);
 
