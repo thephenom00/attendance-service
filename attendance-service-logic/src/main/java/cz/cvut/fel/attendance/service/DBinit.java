@@ -105,11 +105,11 @@ public class DBinit {
 
             // Create Trainers
             List<Trainer> trainers = List.of(
-                    new Trainer("David", "Sobek", "david@example.com", "+420 789 456 123", "securePass123"),
-                    new Trainer("Jiri", "Stepan", "jiri@example.com", "+420 321 654 987", "strongPass456"),
-                    new Trainer("Marek", "Novak", "marek@example.com", "+420 123 789 654", "safePass789"),
-                    new Trainer("Tomas", "Kratochvil", "tomas@example.com", "+420 987 654 321", "passWord123"),
-                    new Trainer("Lucas", "Benes", "lucas@example.com", "+420 741 852 963", "trainerPass456")
+                    new Trainer("David", "Sobek", "david@example.com", "+420 789 456 123", passwordEncoder.encode("123456")),
+                    new Trainer("Jiri", "Stepan", "jiri@example.com", "+420 321 654 987", passwordEncoder.encode("123456")),
+                    new Trainer("Marek", "Novak", "marek@example.com", "+420 123 789 654", passwordEncoder.encode("123456")),
+                    new Trainer("Tomas", "Kratochvil", "tomas@example.com", "+420 987 654 321", passwordEncoder.encode("123456")),
+                    new Trainer("Lucas", "Benes", "lucas@example.com", "+420 741 852 963", passwordEncoder.encode("123456"))
             );
 
             // Assign Trainers to Trainings
@@ -123,7 +123,7 @@ public class DBinit {
             userRepository.saveAll(trainers);
             trainingRepository.saveAll(trainings);
 
-            userRepository.save(new Admin("Karel", "Novak", "admin@gmail.com", "999", passwordEncoder.encode("123")));
+            userRepository.save(new Admin("Karel", "Novak", "admin@gmail.com", "999", passwordEncoder.encode("123456")));
 
             System.out.println("✅ Trainers assigned to trainings:");
 
