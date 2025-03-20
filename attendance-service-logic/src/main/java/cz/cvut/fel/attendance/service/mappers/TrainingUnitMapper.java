@@ -18,6 +18,8 @@ public interface TrainingUnitMapper {
     @Mapping(source = "training.school.name", target = "schoolName")
     @Mapping(source = "training.startTime", target = "startTime")
     @Mapping(source = "training.endTime", target = "endTime")
+    @Mapping(source = "training.name", target = "name")
+    @Mapping(expression = "java(trainingUnitEntity.getTraining().getChildren().size())", target = "numberOfChildren")
     TrainingUnitDto toDto(TrainingUnit trainingUnitEntity);
     TrainingUnit toEntity(TrainingUnitDto trainingUnitDto);
     List<TrainingUnitDto> toDtoList(List<TrainingUnit> trainingUnits);

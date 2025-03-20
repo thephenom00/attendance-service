@@ -22,7 +22,10 @@ import cz.fel.cvut.attendance.service.model.TrainerAttendanceDto;
 import cz.fel.cvut.attendance.service.model.TrainingDto;
 import cz.fel.cvut.attendance.service.model.TrainingUnitDto;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Cache;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +58,7 @@ public class TrainingUnitService {
         return trainingUnitMapper.toDto(trainingUnit);
     }
 
+    @CacheEvict(value = "pastTrainingUnits", allEntries = true)
     public TrainingUnitDto updateDescription(Long id, String description) {
         TrainingUnit trainingUnit = trainingUnitRepository.findById(id)
                 .orElseThrow(() -> new TrainingUnitException("Training Unit with ID " + id + " not found", HttpStatus.NOT_FOUND));
@@ -85,6 +89,7 @@ public class TrainingUnitService {
 
 
 //    @Scheduled(cron = "0 20 4 * * SUN") // s,m,h,dayOfMonth,month,dayOfWeek
+    @CacheEvict(value = "upcomingTrainingUnits", allEntries = true)
     public void createWeeklyTrainingUnits() {
         List<Training> trainings = trainingRepository.findAll();
         LocalDate now = LocalDate.now();

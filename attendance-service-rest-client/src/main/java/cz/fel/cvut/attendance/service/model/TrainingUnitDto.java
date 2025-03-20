@@ -9,8 +9,10 @@ public record TrainingUnitDto(
         LocalDate date,
         String description,
         DayOfWeek dayOfWeek,
+        String name,
         String schoolName,
         LocalTime startTime,
-        LocalTime endTime
+        LocalTime endTime,
+        int numberOfChildren
 ) {
 }

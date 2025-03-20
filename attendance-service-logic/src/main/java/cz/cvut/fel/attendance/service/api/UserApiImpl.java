@@ -37,13 +37,15 @@ public class UserApiImpl implements UserApi {
 
         userService.registerParent(request);
 
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new UserException("User not found.", HttpStatus.NOT_FOUND));
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
         final UserDetails userDetails = userService.loadUserByUsername(email);
         final String accessToken = jwtUtil.generateToken(userDetails);
         final String refreshToken = jwtUtil.generateRefreshToken(userDetails);
 
-        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, "ROLE_PARENT"));
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, "ROLE_PARENT", user.getFirstName(), user.getLastName()));
     }
 
     @Override
@@ -53,13 +55,15 @@ public class UserApiImpl implements UserApi {
 
         userService.registerTrainer(request);
 
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new UserException("User not found.", HttpStatus.NOT_FOUND));
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
         final UserDetails userDetails = userService.loadUserByUsername(email);
         final String accessToken = jwtUtil.generateToken(userDetails);
         final String refreshToken = jwtUtil.generateRefreshToken(userDetails);
 
-        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, "ROLE_TRAINER"));
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, "ROLE_TRAINER", user.getFirstName(), user.getLastName()));
     }
 
     @Override
@@ -76,7 +80,7 @@ public class UserApiImpl implements UserApi {
         final String accessToken = jwtUtil.generateToken(userDetails);
         final String refreshToken = jwtUtil.generateRefreshToken(userDetails);
 
-        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, user.getRole().toString()));
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, user.getRole().toString(), user.getFirstName(), user.getLastName()));
     }
 
     @Override
@@ -105,6 +109,6 @@ public class UserApiImpl implements UserApi {
         String newAccessToken = jwtUtil.generateToken(userDetails);
         String newRefreshToken = jwtUtil.generateRefreshToken(userDetails);
 
-        return ResponseEntity.ok(new AuthResponse(newAccessToken, newRefreshToken, user.getRole().toString()));
+        return ResponseEntity.ok(new AuthResponse(newAccessToken, newRefreshToken, user.getRole().toString(), user.getFirstName(), user.getLastName()));
     }
 }

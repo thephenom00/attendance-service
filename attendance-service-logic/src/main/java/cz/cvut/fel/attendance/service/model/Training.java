@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Table(name = "training")
 @Entity
@@ -94,9 +95,11 @@ public class Training {
         return false;
     }
 
+
     public boolean removeTrainer(Trainer trainer) {
         if (this.trainers.contains(trainer)) {
             this.trainers.remove(trainer);
+            trainer.getTrainings().remove(this);
             return true;
         }
         return false;
@@ -125,5 +128,19 @@ public class Training {
     public void addTrainingUnit(TrainingUnit trainingUnit) {
         this.trainingUnits.add(trainingUnit);
     }
+
+    public TrainingUnit getCurrentTrainingUnit() {
+        return this.trainingUnits.stream()
+                .filter(t -> t.isCurrent())
+                .findFirst()
+                .orElse(null);
+    }
+
+    public List<TrainingUnit> getPastTrainingUnits() {
+        return this.trainingUnits.stream()
+                .filter(t -> !t.isCurrent())
+                .collect(Collectors.toList());
+    }
+
 
 }

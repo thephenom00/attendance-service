@@ -56,7 +56,7 @@ public class SecurityConfig {
 //                        .requestMatchers(SecurityEndpoints.PARENT_URLS).hasAnyAuthority("ROLE_PARENT")
 //                        .requestMatchers(SecurityEndpoints.TRAINER_URLS).hasAuthority("ROLE_TRAINER")
 //                        .requestMatchers(SecurityEndpoints.MULTI_ROLE_URLS).hasAnyAuthority("ROLE_PARENT", "ROLE_TRAINER")
-                        .anyRequest().hasAuthority("ROLE_ADMIN")
+                        .anyRequest().hasAuthority("ROLE_TRAINER")
 //                        .anyRequest().permitAll() // remove
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
