@@ -15,23 +15,19 @@ import cz.cvut.fel.attendance.service.repository.TrainerAttendanceRepository;
 import cz.cvut.fel.attendance.service.repository.TrainingRepository;
 import cz.cvut.fel.attendance.service.repository.TrainingUnitRepository;
 import cz.cvut.fel.attendance.service.repository.UserRepository;
-import cz.fel.cvut.attendance.service.exception.TrainingException;
 import cz.fel.cvut.attendance.service.exception.TrainingUnitException;
 import cz.fel.cvut.attendance.service.model.ChildAttendanceDto;
 import cz.fel.cvut.attendance.service.model.TrainerAttendanceDto;
-import cz.fel.cvut.attendance.service.model.TrainingDto;
 import cz.fel.cvut.attendance.service.model.TrainingUnitDto;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Cache;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -51,6 +47,7 @@ public class TrainingUnitService {
     private final ChildAttendanceMapper childAttendanceMapper;
     private final TrainerAttendanceMapper trainerAttendanceMapper;
 
+    @Cacheable(value = "upcomingTrainingUnits", key = "#id")
     public TrainingUnitDto getTrainingUnit(Long id) {
         TrainingUnit trainingUnit = trainingUnitRepository.findById(id)
                 .orElseThrow(() -> new TrainingUnitException("Training Unit with ID " + id + " not found", HttpStatus.NOT_FOUND));
@@ -58,7 +55,7 @@ public class TrainingUnitService {
         return trainingUnitMapper.toDto(trainingUnit);
     }
 
-    @CacheEvict(value = "pastTrainingUnits", allEntries = true)
+    @CacheEvict(value = { "pastTrainingUnits", "upcomingTrainingUnits" }, allEntries = true)
     public TrainingUnitDto updateDescription(Long id, String description) {
         TrainingUnit trainingUnit = trainingUnitRepository.findById(id)
                 .orElseThrow(() -> new TrainingUnitException("Training Unit with ID " + id + " not found", HttpStatus.NOT_FOUND));
@@ -69,6 +66,7 @@ public class TrainingUnitService {
         return trainingUnitMapper.toDto(trainingUnit);
     }
 
+    @Cacheable(value = "childAttendance", key = "#id")
     public List<ChildAttendanceDto> getChildAttendances(Long id) {
         TrainingUnit trainingUnit = trainingUnitRepository.findById(id)
                 .orElseThrow(() -> new TrainingUnitException("Training Unit with ID " + id + " not found", HttpStatus.NOT_FOUND));
@@ -78,6 +76,7 @@ public class TrainingUnitService {
         return childAttendanceMapper.toDtoList(childAttendances);
     }
 
+    @Cacheable(value = "trainerAttendance", key = "#id")
     public List<TrainerAttendanceDto> getTrainerAttendances(Long id) {
         TrainingUnit trainingUnit = trainingUnitRepository.findById(id)
                 .orElseThrow(() -> new TrainingUnitException("Training Unit with ID " + id + " not found", HttpStatus.NOT_FOUND));
@@ -89,7 +88,7 @@ public class TrainingUnitService {
 
 
 //    @Scheduled(cron = "0 20 4 * * SUN") // s,m,h,dayOfMonth,month,dayOfWeek
-    @CacheEvict(value = "upcomingTrainingUnits", allEntries = true)
+    @CacheEvict(value = { "pastTrainingUnits", "upcomingTrainingUnits" }, allEntries = true)
     public void createWeeklyTrainingUnits() {
         List<Training> trainings = trainingRepository.findAll();
         LocalDate now = LocalDate.now();

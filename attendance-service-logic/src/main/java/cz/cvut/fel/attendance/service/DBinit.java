@@ -150,7 +150,7 @@
 //
 //
 //
-////            trainingUnitService.createWeeklyTrainingUnits();
+//            trainingUnitService.createWeeklyTrainingUnits();
 //
 //            System.out.println("\n================== DATABASE INITIALIZATION COMPLETED ==================\n");
 //

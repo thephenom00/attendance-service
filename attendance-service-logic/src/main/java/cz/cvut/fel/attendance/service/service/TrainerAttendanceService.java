@@ -6,6 +6,7 @@ import cz.cvut.fel.attendance.service.repository.TrainerAttendanceRepository;
 import cz.fel.cvut.attendance.service.exception.AttendanceException;
 import cz.fel.cvut.attendance.service.model.TrainerAttendanceDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ public class TrainerAttendanceService {
     private final TrainerAttendanceRepository trainerAttendanceRepository;
     private final TrainerAttendanceMapper trainerAttendanceMapper;
 
+    @CacheEvict(value = { "trainerAttendance"}, allEntries = true)
     public TrainerAttendanceDto markPresent(Long id) {
         TrainerAttendance trainerAttendance = trainerAttendanceRepository.findById(id)
                 .orElseThrow(() -> new AttendanceException("Attendance with ID " + id + " not found", HttpStatus.NOT_FOUND));
@@ -27,6 +29,7 @@ public class TrainerAttendanceService {
         return trainerAttendanceMapper.toDto(trainerAttendance);
     }
 
+    @CacheEvict(value = { "trainerAttendance"}, allEntries = true)
     public TrainerAttendanceDto markAbsent(Long id) {
         TrainerAttendance trainerAttendance = trainerAttendanceRepository.findById(id)
                 .orElseThrow(() -> new AttendanceException("Attendance with ID " + id + " not found", HttpStatus.NOT_FOUND));
