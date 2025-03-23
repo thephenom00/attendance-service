@@ -1,5 +1,6 @@
 package cz.fel.cvut.attendance.service.api;
 
+import cz.fel.cvut.attendance.service.model.ReportDto;
 import cz.fel.cvut.attendance.service.model.TrainingUnitDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,5 +20,9 @@ public interface TrainerApi {
     @ResponseStatus(HttpStatus.CREATED)
     @GetMapping(value="/{email}/trainingUnit/past")
     ResponseEntity<List<TrainingUnitDto>> getPastTrainingUnits(@PathVariable String email);
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @GetMapping(value="/{email}/report")
+    ResponseEntity<List<ReportDto>> getReport(@PathVariable String email);
 
 }

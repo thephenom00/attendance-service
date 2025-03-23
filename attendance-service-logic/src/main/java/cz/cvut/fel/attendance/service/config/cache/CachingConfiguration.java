@@ -14,7 +14,8 @@ public class CachingConfiguration {
                 "upcomingTrainingUnits",
                 "pastTrainingUnits",
                 "childAttendance",
-                "trainerAttendance"
+                "trainerAttendance",
+                "report"
         );
     }
 
