@@ -2,6 +2,7 @@ package cz.fel.cvut.attendance.service.api;
 
 import cz.fel.cvut.attendance.service.model.ChildDto;
 import cz.fel.cvut.attendance.service.model.EventDto;
+import cz.fel.cvut.attendance.service.model.EventRegisteredChildrenDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,5 @@ public interface EventApi {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value="/{id}/getRegisteredChildren")
-    ResponseEntity<List<ChildDto>> getRegisteredChildren(@PathVariable Long id);
-
+    ResponseEntity<List<EventRegisteredChildrenDto>> getRegisteredChildren(@PathVariable Long id);
 }

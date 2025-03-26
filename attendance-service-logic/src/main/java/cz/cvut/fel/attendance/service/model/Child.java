@@ -78,22 +78,6 @@ public class Child {
         this.requestedTrainingId = requestedTrainingId;
     }
 
-    public boolean addEvent(Event event) {
-        if (!this.events.contains(event)) {
-            this.events.add(event);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean removeEvent(Event event) {
-        if (this.events.contains(event)) {
-            this.events.remove(event);
-            return true;
-        }
-        return false;
-    }
-
     public boolean addChildAttendance(ChildAttendance childAttendance) {
         if (!this.attendances.contains(childAttendance)) {
             this.attendances.add(childAttendance);

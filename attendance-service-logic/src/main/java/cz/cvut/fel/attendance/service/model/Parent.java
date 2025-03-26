@@ -29,7 +29,12 @@ public class Parent extends User {
         super(firstName, lastName, email, phoneNumber, password, Role.ROLE_PARENT);
     }
 
-    public void addChild(Child child) {
-        this.children.add(child);
+    public boolean addChild(Child child) {
+        if (!children.contains(child)) {
+            this.children.add(child);
+            child.setParent(this);
+            return true;
+        }
+        return false;
     }
 }

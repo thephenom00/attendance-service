@@ -9,11 +9,16 @@ import cz.fel.cvut.attendance.service.exception.EventException;
 import cz.fel.cvut.attendance.service.exception.SchoolException;
 import cz.fel.cvut.attendance.service.model.ChildDto;
 import cz.fel.cvut.attendance.service.model.EventDto;
+import cz.fel.cvut.attendance.service.model.EventRegisteredChildrenDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +28,8 @@ public class EventService {
 
     private final EventMapper eventMapper;
 
-    private final ChildMapper childMapper;
-
+    @CacheEvict(value = { "events"}, allEntries = true)
     public EventDto createEvent(EventDto eventDto) {
-
         if (eventRepository.existsByName(eventDto.name())) {
             throw new SchoolException("Event with name '" + eventDto.name() + "' already exists.",
                     HttpStatus.CONFLICT);
@@ -45,11 +48,13 @@ public class EventService {
         return eventMapper.toDto(event);
     }
 
+    @Cacheable(value = "events")
     public List<EventDto> getEvents() {
         List<Event> events = eventRepository.findAll();
         return eventMapper.toDtoList(events);
     }
 
+    @CacheEvict(value = { "events"}, allEntries = true)
     public void deleteEvent(Long id) {
         eventRepository.findById(id)
                 .orElseThrow(() -> new EventException("Event with ID: " + id + " is not existing.", HttpStatus.NOT_FOUND));
@@ -57,6 +62,7 @@ public class EventService {
         eventRepository.deleteById(id);
     }
 
+    @CachePut(value = "events", key = "'all'")
     public EventDto updateEvent(Long id, EventDto eventDto) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventException("Event with ID: " + id + " is not existing.", HttpStatus.NOT_FOUND));
@@ -67,12 +73,17 @@ public class EventService {
         return eventMapper.toDto(event);
     }
 
-    public List<ChildDto> getRegisteredChildren(Long id) {
+    @Cacheable(value = "registeredChildrenForEvent")
+    public List<EventRegisteredChildrenDto> getRegisteredChildren(Long id) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventException("Event with ID: " + id + " is not existing.", HttpStatus.NOT_FOUND));
 
-        List<Child> children = event.getChildren();
+        List<EventRegisteredChildrenDto> children =  event.getChildren().stream()
+                .map(child ->
+                        new EventRegisteredChildrenDto(child.getFirstName() + " " + child.getLastName(),
+                                child.getParent().getPhoneNumber(), child.getParent().getEmail()))
+                .collect(Collectors.toList());
 
-        return childMapper.toDtoList(children);
+        return children;
     }
 }

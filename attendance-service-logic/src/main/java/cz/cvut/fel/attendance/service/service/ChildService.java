@@ -16,6 +16,7 @@ import cz.fel.cvut.attendance.service.exception.ParentException;
 import cz.fel.cvut.attendance.service.exception.TrainingException;
 import cz.fel.cvut.attendance.service.model.ChildDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -112,15 +113,18 @@ public class ChildService {
     }
 
 
+    @CacheEvict(value = { "registeredChildrenForEvent"}, allEntries = true)
     public ChildDto registerChildToEvent(Long childId, Long eventId) {
         Child child = childRepository.findById(childId)
                 .orElseThrow(() -> new ChildException("Child with ID " + childId + " not found.", HttpStatus.NOT_FOUND));
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventException("Event with ID " + eventId + " not found. ", HttpStatus.NOT_FOUND));
 
-        if (!child.addEvent(event) && !event.addChild(child)) {
+        if (!event.addChild(child)) {
             throw new EventException("Child is already registered to this Event", HttpStatus.CONFLICT);
         }
+
+        event.addChild(child);
 
         childRepository.save(child);
         eventRepository.save(event);
@@ -128,15 +132,18 @@ public class ChildService {
         return childMapper.toDto(child);
     }
 
+    @CacheEvict(value = { "registeredChildrenForEvent"}, allEntries = true)
     public void unregisterChildFromEvent(Long childId, Long eventId) {
         Child child = childRepository.findById(childId)
                 .orElseThrow(() -> new ChildException("Child with ID " + childId + " not found.", HttpStatus.NOT_FOUND));
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventException("Event with ID " + eventId + " not found. ", HttpStatus.NOT_FOUND));
 
-        if (!child.removeEvent(event) && !event.removeChild(child)) {
+        if (!event.removeChild(child)) {
             throw new EventException("Child is was not registered to this Event", HttpStatus.FORBIDDEN);
         }
+
+        event.removeChild(child);
 
         childRepository.save(child);
         eventRepository.save(event);

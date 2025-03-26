@@ -4,6 +4,7 @@ import cz.cvut.fel.attendance.service.service.EventService;
 import cz.fel.cvut.attendance.service.api.EventApi;
 import cz.fel.cvut.attendance.service.model.ChildDto;
 import cz.fel.cvut.attendance.service.model.EventDto;
+import cz.fel.cvut.attendance.service.model.EventRegisteredChildrenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class EventApiImpl implements EventApi {
     }
 
     @Override
-    public ResponseEntity<List<ChildDto>> getRegisteredChildren(Long id) {
+    public ResponseEntity<List<EventRegisteredChildrenDto>> getRegisteredChildren(Long id) {
         return ResponseEntity.ok(eventService.getRegisteredChildren(id));
     }
 }

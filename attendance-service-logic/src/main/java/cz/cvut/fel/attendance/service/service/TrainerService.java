@@ -52,10 +52,9 @@ public class TrainerService {
 
                 LocalTime startTime = attendance.getTrainingUnit().getTraining().getStartTime();
                 LocalTime endTime = attendance.getTrainingUnit().getTraining().getEndTime();
-                double hours = java.time.Duration.between(startTime, endTime).toMinutes()/60;
+                double hours = java.time.Duration.between(startTime, endTime).toMinutes();
 
-
-                reports.add(new ReportDto(date, school, name, hours));
+                reports.add(new ReportDto(date, school, name, hours/60));
             }
         }
 
