@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -30,11 +31,10 @@ import java.util.stream.Collectors;
 public class TrainerService {
 
     private final UserRepository userRepository;
-    private final TrainingRepository trainingRepository;
     private final TrainingUnitMapper trainingUnitMapper;
 
     @Cacheable(value = "report", key = "#email")
-    public List<ReportDto> getReport(String email) {
+    public List<ReportDto> getCurrentReport(String email) {
         Trainer trainer = (Trainer) userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserException("User not found.", HttpStatus.NOT_FOUND));
 
@@ -42,8 +42,11 @@ public class TrainerService {
 
         List<ReportDto> reports = new ArrayList<>();
 
+        Month currentMonth = LocalDate.now().getMonth();
+
         for (TrainerAttendance attendance : trainerAttendances) {
-            if (attendance.isPresent()) {
+            if (attendance.isPresent() && (attendance.getTrainingUnit().getDate().getMonth() == currentMonth)) {
+
                 String date = attendance.getTrainingUnit().getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
                 String school = attendance.getTrainingUnit().getTraining().getSchool().getName();

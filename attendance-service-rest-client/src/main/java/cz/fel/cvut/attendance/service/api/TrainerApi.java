@@ -22,7 +22,7 @@ public interface TrainerApi {
     ResponseEntity<List<TrainingUnitDto>> getPastTrainingUnits(@PathVariable String email);
 
     @ResponseStatus(HttpStatus.CREATED)
-    @GetMapping(value="/{email}/report")
-    ResponseEntity<List<ReportDto>> getReport(@PathVariable String email);
+    @GetMapping(value="/{email}/report/currentMonth")
+    ResponseEntity<List<ReportDto>> getCurrentReport(@PathVariable String email);
 
 }

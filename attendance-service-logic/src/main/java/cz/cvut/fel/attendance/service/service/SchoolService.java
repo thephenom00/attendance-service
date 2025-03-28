@@ -47,7 +47,7 @@ public class SchoolService {
             training.setSchool(null);
         }
 
-        schoolRepository.deleteById(id);
+        schoolRepository.delete(school);
     }
 
     public SchoolDto getSchool(Long id) {

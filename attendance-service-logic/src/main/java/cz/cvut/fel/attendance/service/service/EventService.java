@@ -54,12 +54,12 @@ public class EventService {
         return eventMapper.toDtoList(events);
     }
 
-    @CacheEvict(value = { "events"}, allEntries = true)
+    @CacheEvict(value = {"events"}, allEntries = true)
     public void deleteEvent(Long id) {
-        eventRepository.findById(id)
+        Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventException("Event with ID: " + id + " is not existing.", HttpStatus.NOT_FOUND));
 
-        eventRepository.deleteById(id);
+        eventRepository.delete(event);
     }
 
     @CachePut(value = "events", key = "'all'")

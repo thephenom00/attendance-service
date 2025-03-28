@@ -5,6 +5,7 @@ import cz.fel.cvut.attendance.service.model.ParentContactDto;
 import cz.fel.cvut.attendance.service.model.TrainerAttendanceDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,6 @@ public interface ChildAttendanceApi {
     ResponseEntity<ChildAttendanceDto> markAbsent(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{id}/parentContact")
+    @GetMapping("/{id}/parentContact")
     ResponseEntity<ParentContactDto> getParentContact(@PathVariable Long id);
 }

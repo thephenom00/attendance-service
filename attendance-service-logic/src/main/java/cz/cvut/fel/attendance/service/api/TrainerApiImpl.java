@@ -27,7 +27,7 @@ public class TrainerApiImpl implements TrainerApi {
     }
 
     @Override
-    public ResponseEntity<List<ReportDto>> getReport(String email) {
-        return ResponseEntity.ok(trainerService.getReport(email));
+    public ResponseEntity<List<ReportDto>> getCurrentReport(String email) {
+        return ResponseEntity.ok(trainerService.getCurrentReport(email));
     }
 }

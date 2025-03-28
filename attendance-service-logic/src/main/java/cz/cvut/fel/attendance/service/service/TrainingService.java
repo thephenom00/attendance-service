@@ -98,11 +98,10 @@ public class TrainingService {
     }
 
     public void deleteTraining(Long id) {
-        if (!trainingRepository.existsById(id)) {
-            throw new TrainingException("Training with ID " + id + " not found", HttpStatus.NOT_FOUND);
-        }
+        Training training = trainingRepository.findById(id)
+                .orElseThrow(() -> new TrainingException("Training with ID " + id + " not found", HttpStatus.NOT_FOUND));
 
-        trainingRepository.deleteById(id);
+        trainingRepository.delete(training);
     }
 
     public TrainingDto updateTraining(Long id, TrainingDto trainingDto) {
