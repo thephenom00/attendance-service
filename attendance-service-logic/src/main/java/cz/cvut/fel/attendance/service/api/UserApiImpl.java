@@ -42,10 +42,10 @@ public class UserApiImpl implements UserApi {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
         final UserDetails userDetails = userService.loadUserByUsername(email);
-        final String accessToken = jwtUtil.generateToken(userDetails);
-        final String refreshToken = jwtUtil.generateRefreshToken(userDetails);
+        final String accessToken = jwtUtil.generateToken(userDetails, user.getRole().toString(), user.getFirstName(), user.getLastName());
+        final String refreshToken = jwtUtil.generateRefreshToken(userDetails, user.getRole().toString(), user.getFirstName(), user.getLastName());
 
-        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, "ROLE_PARENT", user.getFirstName(), user.getLastName()));
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
     }
 
     @Override
@@ -60,10 +60,10 @@ public class UserApiImpl implements UserApi {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
         final UserDetails userDetails = userService.loadUserByUsername(email);
-        final String accessToken = jwtUtil.generateToken(userDetails);
-        final String refreshToken = jwtUtil.generateRefreshToken(userDetails);
+        final String accessToken = jwtUtil.generateToken(userDetails, user.getRole().toString(), user.getFirstName(), user.getLastName());
+        final String refreshToken = jwtUtil.generateRefreshToken(userDetails, user.getRole().toString(), user.getFirstName(), user.getLastName());
 
-        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, "ROLE_TRAINER", user.getFirstName(), user.getLastName()));
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
     }
 
     @Override
@@ -77,10 +77,10 @@ public class UserApiImpl implements UserApi {
         );
 
         final UserDetails userDetails = userService.loadUserByUsername(email);
-        final String accessToken = jwtUtil.generateToken(userDetails);
-        final String refreshToken = jwtUtil.generateRefreshToken(userDetails);
+        final String accessToken = jwtUtil.generateToken(userDetails, user.getRole().toString(), user.getFirstName(), user.getLastName());
+        final String refreshToken = jwtUtil.generateRefreshToken(userDetails, user.getRole().toString(), user.getFirstName(), user.getLastName());
 
-        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, user.getRole().toString(), user.getFirstName(), user.getLastName()));
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
     }
 
     @Override
@@ -106,9 +106,9 @@ public class UserApiImpl implements UserApi {
             throw new RuntimeException("Refresh token expired or invalid.");
         }
 
-        String newAccessToken = jwtUtil.generateToken(userDetails);
-        String newRefreshToken = jwtUtil.generateRefreshToken(userDetails);
+        String newAccessToken = jwtUtil.generateToken(userDetails, user.getRole().toString(), user.getFirstName(), user.getLastName());
+        String newRefreshToken = jwtUtil.generateRefreshToken(userDetails, user.getRole().toString(), user.getFirstName(), user.getLastName());
 
-        return ResponseEntity.ok(new AuthResponse(newAccessToken, newRefreshToken, user.getRole().toString(), user.getFirstName(), user.getLastName()));
+        return ResponseEntity.ok(new AuthResponse(newAccessToken, newRefreshToken));
     }
 }

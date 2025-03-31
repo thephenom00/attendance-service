@@ -113,7 +113,6 @@ public class ChildService {
     }
 
 
-    @CacheEvict(value = { "registeredChildrenForEvent"}, allEntries = true)
     public ChildDto registerChildToEvent(Long childId, Long eventId) {
         Child child = childRepository.findById(childId)
                 .orElseThrow(() -> new ChildException("Child with ID " + childId + " not found.", HttpStatus.NOT_FOUND));
@@ -132,7 +131,6 @@ public class ChildService {
         return childMapper.toDto(child);
     }
 
-    @CacheEvict(value = { "registeredChildrenForEvent"}, allEntries = true)
     public void unregisterChildFromEvent(Long childId, Long eventId) {
         Child child = childRepository.findById(childId)
                 .orElseThrow(() -> new ChildException("Child with ID " + childId + " not found.", HttpStatus.NOT_FOUND));

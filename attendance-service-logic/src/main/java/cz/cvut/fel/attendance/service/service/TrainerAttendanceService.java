@@ -17,7 +17,6 @@ public class TrainerAttendanceService {
     private final TrainerAttendanceRepository trainerAttendanceRepository;
     private final TrainerAttendanceMapper trainerAttendanceMapper;
 
-    @CacheEvict(value = {"trainerAttendance", "report"}, allEntries = true)
     public TrainerAttendanceDto markPresent(Long id) {
         TrainerAttendance trainerAttendance = trainerAttendanceRepository.findById(id)
                 .orElseThrow(() -> new AttendanceException("Attendance with ID " + id + " not found", HttpStatus.NOT_FOUND));
@@ -29,7 +28,6 @@ public class TrainerAttendanceService {
         return trainerAttendanceMapper.toDto(trainerAttendance);
     }
 
-    @CacheEvict(value = { "trainerAttendance", "report"}, allEntries = true)
     public TrainerAttendanceDto markAbsent(Long id) {
         TrainerAttendance trainerAttendance = trainerAttendanceRepository.findById(id)
                 .orElseThrow(() -> new AttendanceException("Attendance with ID " + id + " not found", HttpStatus.NOT_FOUND));

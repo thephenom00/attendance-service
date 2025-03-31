@@ -48,7 +48,6 @@ public class TrainingUnitService {
     private final ChildAttendanceMapper childAttendanceMapper;
     private final TrainerAttendanceMapper trainerAttendanceMapper;
 
-    @Cacheable(value = "upcomingTrainingUnits", key = "#id")
     public TrainingUnitDto getTrainingUnit(Long id) {
         TrainingUnit trainingUnit = trainingUnitRepository.findById(id)
                 .orElseThrow(() -> new TrainingUnitException("Training Unit with ID " + id + " not found", HttpStatus.NOT_FOUND));
@@ -56,7 +55,6 @@ public class TrainingUnitService {
         return trainingUnitMapper.toDto(trainingUnit);
     }
 
-    @CacheEvict(value = { "pastTrainingUnits", "upcomingTrainingUnits" }, allEntries = true)
     public TrainingUnitDto updateDescription(Long id, String description) {
         TrainingUnit trainingUnit = trainingUnitRepository.findById(id)
                 .orElseThrow(() -> new TrainingUnitException("Training Unit with ID " + id + " not found", HttpStatus.NOT_FOUND));
@@ -67,7 +65,6 @@ public class TrainingUnitService {
         return trainingUnitMapper.toDto(trainingUnit);
     }
 
-    @Cacheable(value = "childAttendance", key = "#id")
     public List<ChildAttendanceDto> getChildAttendances(Long id) {
         TrainingUnit trainingUnit = trainingUnitRepository.findById(id)
                 .orElseThrow(() -> new TrainingUnitException("Training Unit with ID " + id + " not found", HttpStatus.NOT_FOUND));
@@ -77,7 +74,6 @@ public class TrainingUnitService {
         return childAttendanceMapper.toDtoList(childAttendances);
     }
 
-    @Cacheable(value = "trainerAttendance", key = "#id")
     public List<TrainerAttendanceDto> getTrainerAttendances(Long id) {
         TrainingUnit trainingUnit = trainingUnitRepository.findById(id)
                 .orElseThrow(() -> new TrainingUnitException("Training Unit with ID " + id + " not found", HttpStatus.NOT_FOUND));
@@ -89,7 +85,6 @@ public class TrainingUnitService {
 
 
 //    @Scheduled(cron = "0 20 4 * * SUN") // s,m,h,dayOfMonth,month,dayOfWeek
-    @CacheEvict(value = { "pastTrainingUnits", "upcomingTrainingUnits" }, allEntries = true)
     public void createWeeklyTrainingUnits() {
         List<Training> trainings = trainingRepository.findAll();
         LocalDate now = LocalDate.now();

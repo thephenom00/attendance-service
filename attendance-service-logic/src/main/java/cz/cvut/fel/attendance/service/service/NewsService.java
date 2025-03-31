@@ -20,7 +20,6 @@ public class NewsService {
 
     private final NewsRepository newsRepository;
 
-    @CacheEvict(value = {"news"}, allEntries = true)
     public NewsDto createNews(NewsDto newsDto) {
         News news = newsMapper.toEntity(newsDto);
 
@@ -28,12 +27,10 @@ public class NewsService {
         return newsMapper.toDto(news);
     }
 
-    @Cacheable(value = "news")
     public List<NewsDto> getNews() {
         return newsMapper.toDtoList(newsRepository.findAll());
     }
 
-    @CachePut(value = "news", key = "'all'")
     public NewsDto updateNews(Long id, NewsDto newsDto) throws Exception {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new Exception("News with ID " + id + " not found."));
@@ -44,7 +41,6 @@ public class NewsService {
         return newsMapper.toDto(news);
     }
 
-    @CacheEvict(value = {"news"}, allEntries = true)
     public void deleteNews(Long id) throws Exception {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new Exception("News with ID " + id + " not found."));

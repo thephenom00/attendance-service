@@ -6,6 +6,7 @@ import cz.cvut.fel.attendance.service.model.TrainerAttendance;
 import cz.cvut.fel.attendance.service.model.Training;
 import cz.cvut.fel.attendance.service.model.TrainingUnit;
 import cz.cvut.fel.attendance.service.repository.TrainingRepository;
+import cz.cvut.fel.attendance.service.repository.TrainingUnitRepository;
 import cz.cvut.fel.attendance.service.repository.UserRepository;
 import cz.fel.cvut.attendance.service.exception.UserException;
 import cz.fel.cvut.attendance.service.model.ReportDto;
@@ -32,8 +33,8 @@ public class TrainerService {
 
     private final UserRepository userRepository;
     private final TrainingUnitMapper trainingUnitMapper;
+    private final TrainingUnitRepository trainingUnitRepository;
 
-    @Cacheable(value = "report", key = "#email")
     public List<ReportDto> getCurrentReport(String email) {
         Trainer trainer = (Trainer) userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserException("User not found.", HttpStatus.NOT_FOUND));
@@ -65,30 +66,18 @@ public class TrainerService {
     }
 
 
-    @Cacheable(value = "upcomingTrainingUnits", key = "#email")
     public List<TrainingUnitDto> getUpcomingTrainingUnits(String email) {
-        Trainer trainer = (Trainer) userRepository.findByEmail(email).orElseThrow(()-> new UserException("User not found.", HttpStatus.NOT_FOUND));
-
-        List<TrainingUnitDto> upcomingUnits = trainer.getTrainings().stream()
-                .map(Training::getCurrentTrainingUnit)
-                .filter(unit -> unit != null)
+        List<TrainingUnit> upcomingUnits = trainingUnitRepository.findUpcomingUnitsByTrainerEmail(email);
+        return upcomingUnits.stream()
                 .map(trainingUnitMapper::toDto)
                 .toList();
-
-        return upcomingUnits;
     }
 
-    @Cacheable(value = "pastTrainingUnits", key = "#email")
     public List<TrainingUnitDto> getPastTrainingUnits(String email) {
-        Trainer trainer = (Trainer) userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserException("User not found.", HttpStatus.NOT_FOUND));
-
-        List<TrainingUnitDto> pastUnits = trainer.getTrainings().stream()
-                .flatMap(training -> training.getPastTrainingUnits().stream())
+        List<TrainingUnit> pastUnits = trainingUnitRepository.findPastUnitsByTrainerEmail(email);
+        return pastUnits.stream()
                 .map(trainingUnitMapper::toDto)
                 .toList();
-
-        return pastUnits;
     }
 
 }

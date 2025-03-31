@@ -28,7 +28,6 @@ public class EventService {
 
     private final EventMapper eventMapper;
 
-    @CacheEvict(value = { "events"}, allEntries = true)
     public EventDto createEvent(EventDto eventDto) {
         if (eventRepository.existsByName(eventDto.name())) {
             throw new SchoolException("Event with name '" + eventDto.name() + "' already exists.",
@@ -48,13 +47,11 @@ public class EventService {
         return eventMapper.toDto(event);
     }
 
-    @Cacheable(value = "events")
     public List<EventDto> getEvents() {
         List<Event> events = eventRepository.findAll();
         return eventMapper.toDtoList(events);
     }
 
-    @CacheEvict(value = {"events"}, allEntries = true)
     public void deleteEvent(Long id) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventException("Event with ID: " + id + " is not existing.", HttpStatus.NOT_FOUND));
@@ -62,7 +59,6 @@ public class EventService {
         eventRepository.delete(event);
     }
 
-    @CachePut(value = "events", key = "'all'")
     public EventDto updateEvent(Long id, EventDto eventDto) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventException("Event with ID: " + id + " is not existing.", HttpStatus.NOT_FOUND));
@@ -73,7 +69,6 @@ public class EventService {
         return eventMapper.toDto(event);
     }
 
-    @Cacheable(value = "registeredChildrenForEvent")
     public List<EventRegisteredChildrenDto> getRegisteredChildren(Long id) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventException("Event with ID: " + id + " is not existing.", HttpStatus.NOT_FOUND));

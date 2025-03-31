@@ -57,15 +57,21 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, String role, String firstName, String lastName) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("type", "access");
+        claims.put("role", role);
+        claims.put("firstName", firstName);
+        claims.put("lastName", lastName);
         return createToken(claims, userDetails.getUsername(), ACCESS_TOKEN_VALIDITY);
     }
 
-    public String generateRefreshToken(UserDetails userDetails) {
+    public String generateRefreshToken(UserDetails userDetails, String role, String firstName, String lastName) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("type", "refresh");
+        claims.put("role", role);
+        claims.put("firstName", firstName);
+        claims.put("lastName", lastName);
         return createToken(claims, userDetails.getUsername(), REFRESH_TOKEN_VALIDITY);
     }
 
