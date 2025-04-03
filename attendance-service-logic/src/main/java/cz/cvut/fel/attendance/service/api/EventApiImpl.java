@@ -2,9 +2,8 @@ package cz.cvut.fel.attendance.service.api;
 
 import cz.cvut.fel.attendance.service.service.EventService;
 import cz.fel.cvut.attendance.service.api.EventApi;
-import cz.fel.cvut.attendance.service.model.ChildDto;
 import cz.fel.cvut.attendance.service.model.EventDto;
-import cz.fel.cvut.attendance.service.model.EventRegisteredChildrenDto;
+import cz.fel.cvut.attendance.service.model.trainer.EventRegisteredChildrenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

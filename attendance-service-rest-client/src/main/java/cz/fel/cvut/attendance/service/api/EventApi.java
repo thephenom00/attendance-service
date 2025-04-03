@@ -1,8 +1,7 @@
 package cz.fel.cvut.attendance.service.api;
 
-import cz.fel.cvut.attendance.service.model.ChildDto;
 import cz.fel.cvut.attendance.service.model.EventDto;
-import cz.fel.cvut.attendance.service.model.EventRegisteredChildrenDto;
+import cz.fel.cvut.attendance.service.model.trainer.EventRegisteredChildrenDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package cz.fel.cvut.attendance.service.api;
 
-import cz.fel.cvut.attendance.service.model.ReportDto;
+import cz.fel.cvut.attendance.service.model.trainer.ReportDto;
 import cz.fel.cvut.attendance.service.model.TrainingUnitDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

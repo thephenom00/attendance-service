@@ -1,4 +1,4 @@
-package cz.fel.cvut.attendance.service.model;
+package cz.fel.cvut.attendance.service.model.trainer;
 
 
 public record ParentContactDto(

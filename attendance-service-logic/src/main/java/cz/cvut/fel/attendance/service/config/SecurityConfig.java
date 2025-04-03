@@ -53,11 +53,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .requestMatchers(SecurityEndpoints.PUBLIC_URLS).permitAll()
-//                        .requestMatchers(SecurityEndpoints.PARENT_URLS).hasAnyAuthority("ROLE_PARENT")
-//                        .requestMatchers(SecurityEndpoints.TRAINER_URLS).hasAuthority("ROLE_TRAINER")
-//                        .requestMatchers(SecurityEndpoints.MULTI_ROLE_URLS).hasAnyAuthority("ROLE_PARENT", "ROLE_TRAINER")
-                        .anyRequest().hasAuthority("ROLE_TRAINER")
-//                        .anyRequest().permitAll() // remove
+                        .requestMatchers(SecurityEndpoints.PARENT_URLS).hasAnyAuthority("ROLE_PARENT")
+                        .requestMatchers(SecurityEndpoints.TRAINER_URLS).hasAuthority("ROLE_TRAINER")
+                        .requestMatchers(SecurityEndpoints.MULTI_ROLE_URLS).hasAnyAuthority("ROLE_PARENT", "ROLE_TRAINER")
+                        .anyRequest().hasAuthority("ROLE_ADMIN")
+//                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(AbstractHttpConfigurer::disable)

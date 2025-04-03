@@ -2,7 +2,7 @@ package cz.cvut.fel.attendance.service.api;
 
 import cz.cvut.fel.attendance.service.service.TrainerService;
 import cz.fel.cvut.attendance.service.api.TrainerApi;
-import cz.fel.cvut.attendance.service.model.ReportDto;
+import cz.fel.cvut.attendance.service.model.trainer.ReportDto;
 import cz.fel.cvut.attendance.service.model.TrainingUnitDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -3,7 +3,7 @@ package cz.cvut.fel.attendance.service.api;
 import cz.cvut.fel.attendance.service.service.ChildAttendanceService;
 import cz.fel.cvut.attendance.service.api.ChildAttendanceApi;
 import cz.fel.cvut.attendance.service.model.ChildAttendanceDto;
-import cz.fel.cvut.attendance.service.model.ParentContactDto;
+import cz.fel.cvut.attendance.service.model.trainer.ParentContactDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

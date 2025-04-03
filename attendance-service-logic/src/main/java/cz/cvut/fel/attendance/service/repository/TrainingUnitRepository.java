@@ -19,4 +19,16 @@ public interface TrainingUnitRepository extends JpaRepository<TrainingUnit, Long
     @Query("SELECT tu FROM TrainingUnit tu JOIN tu.training t JOIN t.trainers tr WHERE tr.email = :email AND tu.current = false")
     List<TrainingUnit> findPastUnitsByTrainerEmail(@Param("email") String email);
 
+    @Query("""
+    SELECT DISTINCT tu FROM TrainingUnit tu
+    JOIN tu.training t
+    JOIN t.children c
+    JOIN c.parent p
+    WHERE p.email = :email AND tu.current = true
+    """)
+    List<TrainingUnit> findUpcomingUnitsByParentEmail(@Param("email") String email);
+
+
+
+
 }

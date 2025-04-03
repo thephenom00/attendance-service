@@ -1,19 +1,13 @@
 package cz.cvut.fel.attendance.service.service;
 
-import cz.cvut.fel.attendance.service.mappers.ChildMapper;
 import cz.cvut.fel.attendance.service.mappers.EventMapper;
-import cz.cvut.fel.attendance.service.model.Child;
 import cz.cvut.fel.attendance.service.model.Event;
 import cz.cvut.fel.attendance.service.repository.EventRepository;
 import cz.fel.cvut.attendance.service.exception.EventException;
 import cz.fel.cvut.attendance.service.exception.SchoolException;
-import cz.fel.cvut.attendance.service.model.ChildDto;
 import cz.fel.cvut.attendance.service.model.EventDto;
-import cz.fel.cvut.attendance.service.model.EventRegisteredChildrenDto;
+import cz.fel.cvut.attendance.service.model.trainer.EventRegisteredChildrenDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 

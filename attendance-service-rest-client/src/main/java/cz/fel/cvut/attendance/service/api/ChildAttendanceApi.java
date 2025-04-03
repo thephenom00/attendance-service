@@ -1,8 +1,7 @@
 package cz.fel.cvut.attendance.service.api;
 
 import cz.fel.cvut.attendance.service.model.ChildAttendanceDto;
-import cz.fel.cvut.attendance.service.model.ParentContactDto;
-import cz.fel.cvut.attendance.service.model.TrainerAttendanceDto;
+import cz.fel.cvut.attendance.service.model.trainer.ParentContactDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
