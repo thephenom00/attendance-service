@@ -18,7 +18,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "parent")
 @DiscriminatorValue("PARENT")
 public class Parent extends User {
 

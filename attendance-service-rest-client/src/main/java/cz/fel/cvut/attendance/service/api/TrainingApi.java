@@ -33,15 +33,15 @@ public interface TrainingApi {
     ResponseEntity<List<TrainingDto>> getTrainings();
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/{id}/trainingUnit/current")
+    @GetMapping(value = "/{id}/training-unit/current")
     ResponseEntity<TrainingUnitDto> getCurrentTrainingUnit(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/{id}/trainingUnit/past")
+    @GetMapping(value = "/{id}/training-unit/past")
     ResponseEntity<List<TrainingUnitDto>> getPastTrainingUnits(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/{id}/trainingUnit")
+    @GetMapping(value = "/{id}/training-unit")
     ResponseEntity<List<TrainingUnitDto>> getTrainingUnits(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -53,6 +53,6 @@ public interface TrainingApi {
     ResponseEntity<TrainingDto> updateTraining(@PathVariable Long id, @RequestBody TrainingDto trainingDto);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}/getChildren")
+    @GetMapping("/{id}/get-children")
     ResponseEntity<List<ChildDto>> getChildren(@PathVariable Long id);
 }

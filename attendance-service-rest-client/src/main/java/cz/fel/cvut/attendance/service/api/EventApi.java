@@ -39,6 +39,6 @@ public interface EventApi {
     ResponseEntity<EventDto> updateEvent(@PathVariable Long id, @RequestBody EventDto eventDto);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value="/{id}/getRegisteredChildren")
+    @GetMapping(value="/{id}/registered-children")
     ResponseEntity<List<EventRegisteredChildrenDto>> getRegisteredChildren(@PathVariable Long id);
 }

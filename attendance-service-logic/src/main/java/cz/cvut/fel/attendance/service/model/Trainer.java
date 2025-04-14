@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name="trainer")
 @Entity
 @NoArgsConstructor
 @Getter

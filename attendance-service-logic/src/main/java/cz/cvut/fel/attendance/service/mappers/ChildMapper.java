@@ -14,7 +14,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ChildMapper {
-    @Mapping(source = "parent.id", target = "parentId")
     ChildDto toDto(Child childEntity);
 
     Child toEntity(ChildDto childDto);

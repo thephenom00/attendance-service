@@ -17,28 +17,25 @@ import java.util.List;
 
 @RequestMapping("/child")
 public interface ChildApi {
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<ChildDto> createChild(@RequestBody ChildDto childDto);
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/unassigned")
     ResponseEntity<List<ChildDto>> getUnassignedChildren();
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{id}/addToTraining")
+    @PatchMapping("/{id}/add-to-training")
     ResponseEntity<ChildDto> addChildToTraining(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{childId}/removeFromTraining/{trainingId}")
+    @PatchMapping("/{childId}/remove-from-training/{trainingId}")
     ResponseEntity<Void> removeChildFromTraining(@PathVariable Long childId, @PathVariable Long trainingId);
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{childId}/registerToEvent/{eventId}")
+    @PatchMapping("/{childId}/register-to-event/{eventId}")
     ResponseEntity<ChildDto> registerChildToEvent(@PathVariable Long childId, @PathVariable Long eventId);
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{childId}/unregisterFromEvent/{eventId}")
+    @PatchMapping("/{childId}/unregister-from-event/{eventId}")
     ResponseEntity<Void> unregisterChildFromEvent(@PathVariable Long childId, @PathVariable Long eventId);
 
     @ResponseStatus(HttpStatus.OK)

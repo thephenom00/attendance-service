@@ -17,11 +17,6 @@ public class ChildApiImpl implements ChildApi {
     private final ChildService childService;
 
     @Override
-    public ResponseEntity<ChildDto> createChild(ChildDto childDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(childService.createChild(childDto));
-    }
-
-    @Override
     public ResponseEntity<List<ChildDto>> getUnassignedChildren() {
         return ResponseEntity.ok(childService.getUnassignedChildren());
     }

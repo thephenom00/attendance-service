@@ -11,6 +11,5 @@ public record ChildDto(
         String city,
         int zip,
         String birthNumber,
-        Long parentId,
         Long requestedTrainingId
 ) {}

@@ -42,41 +42,6 @@ public class ChildService {
         return childMapper.toDtoList(children);
     }
 
-    public ChildDto createChild(ChildDto childDto) {
-        User user = userRepository.findById(childDto.parentId())
-                .orElseThrow(() -> new ParentException("User with ID: " + childDto.parentId() + " is not found.", HttpStatus.NOT_FOUND));
-
-        if (!(user instanceof Parent parent)) {
-            throw new ParentException("User with ID: " + childDto.parentId() + " is not a Parent.", HttpStatus.BAD_REQUEST);
-        }
-
-        Child child = childMapper.toEntity(childDto);
-
-        if (childRepository.existsByFirstName(child.getFirstName()) &
-                childRepository.existsByLastName(child.getLastName())) {
-            throw new ChildException("Child " + child.getFirstName() + " " + child.getLastName() + " is already registered.",
-                    HttpStatus.CONFLICT);
-        } else if (childRepository.existsByBirthNumber(child.getBirthNumber())) {
-            throw new ChildException("Child with birth number " + child.getBirthNumber() + " is already registered.",
-                    HttpStatus.CONFLICT);
-        }
-
-        Training training = trainingRepository.findById(childDto.requestedTrainingId()).orElseThrow(()-> new TrainingException("Training with ID: " + childDto.requestedTrainingId() + " not found.", HttpStatus.NOT_FOUND));
-
-        if ((training.getChildren().size() + 1) > training.getCapacity()) {
-            throw new TrainingException("Child cannot be added to training, because it has full capacity.", HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
-        }
-
-        training.setCapacity(training.getCapacity() - 1);
-        parent.addChild(child);
-        child.setParent(parent);
-
-        trainingRepository.save(training);
-        userRepository.save(parent);
-        childRepository.save(child);
-        return childMapper.toDto(child);
-    }
-
     public ChildDto addChildToTraining(Long id) {
         Child child = childRepository.findById(id)
                 .orElseThrow(() -> new ChildException("Child with ID " + id + " not found.", HttpStatus.NOT_FOUND));

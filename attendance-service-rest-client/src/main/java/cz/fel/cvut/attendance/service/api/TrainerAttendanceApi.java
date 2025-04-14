@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@RequestMapping("/trainerAttendance")
+@RequestMapping("/trainer-attendance")
 public interface TrainerAttendanceApi {
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{id}/markPresent")
+    @PatchMapping("/{id}/mark-present")
     ResponseEntity<TrainerAttendanceDto> markPresent(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{id}/markAbsent")
+    @PatchMapping("/{id}/mark-absent")
     ResponseEntity<TrainerAttendanceDto> markAbsent(@PathVariable Long id);
 }

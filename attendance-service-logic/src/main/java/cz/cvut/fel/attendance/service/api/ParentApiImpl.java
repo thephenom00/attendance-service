@@ -25,4 +25,9 @@ public class ParentApiImpl implements ParentApi {
     public ResponseEntity<List<ChildDto>> getChildren(String email) {
         return ResponseEntity.ok(parentService.getChildren(email));
     }
+
+    @Override
+    public ResponseEntity<ChildDto> createChild(String email, ChildDto childDto) {
+        return ResponseEntity.ok(parentService.createChild(email, childDto));
+    }
 }

@@ -14,29 +14,31 @@ public class SecurityEndpoints {
     );
 
     final RequestMatcher PARENT_URLS = new OrRequestMatcher(
-            antMatcher(HttpMethod.GET,"/parent/**/trainingUnit/upcoming")
+            antMatcher(HttpMethod.GET,"/parent/**/training-unit/upcoming"),
+            antMatcher(HttpMethod.GET,"/parent/**/children"),
+            antMatcher(HttpMethod.GET,"/school"),
+            antMatcher(HttpMethod.GET,"/school/**/trainings"),
+            antMatcher(HttpMethod.POST, "/parent/**/create-child")
     );
 
     final RequestMatcher TRAINER_URLS = new OrRequestMatcher(
             // TrainingUnits
-            antMatcher(HttpMethod.GET,"/trainer/**/trainingUnit/upcoming"),
-            antMatcher(HttpMethod.GET,"/trainer/**/trainingUnit/past"),
-            antMatcher(HttpMethod.PATCH,"/trainingUnit/**/description"),
-            antMatcher(HttpMethod.GET,"/trainingUnit/**"),
+            antMatcher(HttpMethod.GET,"/trainer/**/training-unit/upcoming"),
+            antMatcher(HttpMethod.GET,"/trainer/**/training-unit/past"),
+            antMatcher(HttpMethod.PATCH,"/training-unit/**/description"),
+            antMatcher(HttpMethod.GET,"/training-unit/**"),
             // Attendances
-            antMatcher(HttpMethod.GET,"/trainingUnit/**/trainerAttendance"),
-            antMatcher(HttpMethod.GET,"/trainingUnit/**/childAttendance"),
-            antMatcher(HttpMethod.PATCH,"/childAttendance/**/markPresent"),
-            antMatcher(HttpMethod.PATCH,"/childAttendance/**/markAbsent"),
-            antMatcher(HttpMethod.PATCH,"/trainerAttendance/**/markPresent"),
-            antMatcher(HttpMethod.PATCH,"/trainerAttendance/**/markAbsent"),
-            antMatcher(HttpMethod.GET,"/childAttendance/**/parentContact"),
+            antMatcher(HttpMethod.GET,"/training-unit/**/trainer-attendance"),
+            antMatcher(HttpMethod.GET,"/training-unit/**/child-attendance"),
+            antMatcher(HttpMethod.PATCH,"/child-attendance/**/mark-present"),
+            antMatcher(HttpMethod.PATCH,"/child-attendance/**/mark-absent"),
+            antMatcher(HttpMethod.PATCH,"/trainer-attendance/**/mark-present"),
+            antMatcher(HttpMethod.PATCH,"/trainer-attendance/**/mark-absent"),
+            antMatcher(HttpMethod.GET,"/child-attendance/**/parent-contact"),
             // Report
-            antMatcher(HttpMethod.PATCH,"/trainer/**/report"),
+            antMatcher(HttpMethod.GET,"/trainer/**/report/current-month"),
             // Event
-            antMatcher(HttpMethod.PATCH,"/event/**/registeredChildren")
-
-
+            antMatcher(HttpMethod.GET,"/event/**/registered-children")
     );
 
     final RequestMatcher MULTI_ROLE_URLS = new OrRequestMatcher(

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 
-@RequestMapping("/trainingUnit")
+@RequestMapping("/training-unit")
 public interface TrainingUnitApi {
 
     @ResponseStatus(HttpStatus.OK)
@@ -27,11 +27,11 @@ public interface TrainingUnitApi {
     ResponseEntity<TrainingUnitDto> getTrainingUnit(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}/childAttendance")
+    @GetMapping("/{id}/child-attendance")
     ResponseEntity<List<ChildAttendanceDto>> getChildAttendances(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}/trainerAttendance")
+    @GetMapping("/{id}/trainer-attendance")
     ResponseEntity<List<TrainerAttendanceDto>> getTrainerAttendances(@PathVariable Long id);
 
 

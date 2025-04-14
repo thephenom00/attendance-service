@@ -14,15 +14,15 @@ import java.util.List;
 @RequestMapping("/trainer")
 public interface TrainerApi {
     @ResponseStatus(HttpStatus.CREATED)
-    @GetMapping(value="/{email}/trainingUnit/upcoming")
+    @GetMapping(value="/{email}/training-unit/upcoming")
     ResponseEntity<List<TrainingUnitDto>> getUpcomingTrainingUnits(@PathVariable String email);
 
     @ResponseStatus(HttpStatus.CREATED)
-    @GetMapping(value="/{email}/trainingUnit/past")
+    @GetMapping(value="/{email}/training-unit/past")
     ResponseEntity<List<TrainingUnitDto>> getPastTrainingUnits(@PathVariable String email);
 
     @ResponseStatus(HttpStatus.CREATED)
-    @GetMapping(value="/{email}/report/currentMonth")
+    @GetMapping(value="/{email}/report/current-month")
     ResponseEntity<List<ReportDto>> getCurrentReport(@PathVariable String email);
 
 }

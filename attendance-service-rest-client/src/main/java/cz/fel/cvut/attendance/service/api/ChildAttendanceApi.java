@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@RequestMapping("/childAttendance")
+@RequestMapping("/child-attendance")
 public interface ChildAttendanceApi {
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{id}/markPresent")
+    @PatchMapping("/{id}/mark-present")
     ResponseEntity<ChildAttendanceDto> markPresent(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{id}/markAbsent")
+    @PatchMapping("/{id}/mark-absent")
     ResponseEntity<ChildAttendanceDto> markAbsent(@PathVariable Long id);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}/parentContact")
+    @GetMapping("/{id}/parent-contact")
     ResponseEntity<ParentContactDto> getParentContact(@PathVariable Long id);
 }
