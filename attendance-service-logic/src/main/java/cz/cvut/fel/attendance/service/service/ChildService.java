@@ -88,8 +88,6 @@ public class ChildService {
             throw new EventException("Child is already registered to this Event", HttpStatus.CONFLICT);
         }
 
-        event.addChild(child);
-
         childRepository.save(child);
         eventRepository.save(event);
 

@@ -18,22 +18,22 @@ import java.util.Map;
 public class GlobalExceptionHandler {
     @ExceptionHandler(SchoolException.class)
     public ResponseEntity<Map<String, String>> handleSchoolException(SchoolException ex) {
-        return ResponseEntity.status(ex.getStatus()).body(Map.of("message", ex.getMessage()));
+        return ResponseEntity.status(ex.getStatus()).body(Map.of("status", String.valueOf(ex.getStatus().value()),"message", ex.getMessage()));
     }
 
     @ExceptionHandler(TrainingException.class)
     public ResponseEntity<Map<String, String>> handleTrainingException(TrainingException ex) {
-        return ResponseEntity.status(ex.getStatus()).body(Map.of("message", ex.getMessage()));
+        return ResponseEntity.status(ex.getStatus()).body(Map.of("status", String.valueOf(ex.getStatus().value()),"message", ex.getMessage()));
     }
 
     @ExceptionHandler(ChildException.class)
     public ResponseEntity<Map<String, String>> handleChildException(ChildException ex) {
-        return ResponseEntity.status(ex.getStatus()).body(Map.of("message", ex.getMessage()));
+        return ResponseEntity.status(ex.getStatus()).body(Map.of("status", String.valueOf(ex.getStatus().value()),"message", ex.getMessage()));
     }
 
     @ExceptionHandler(UserException.class)
     public ResponseEntity<Map<String, String>> handleUserException(UserException ex) {
-        return ResponseEntity.status(ex.getStatus()).body(Map.of("message", ex.getMessage()));
+        return ResponseEntity.status(ex.getStatus()).body(Map.of("status", String.valueOf(ex.getStatus().value()),"message", ex.getMessage()));
     }
 
     // AUTO

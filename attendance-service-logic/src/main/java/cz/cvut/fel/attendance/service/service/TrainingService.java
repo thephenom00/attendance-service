@@ -31,8 +31,6 @@ public class TrainingService {
 
     private final SchoolRepository schoolRepository;
 
-    private final TrainingUnitRepository trainingUnitRepository;
-
     private final TrainingMapper trainingMapper;
 
     private final ChildMapper childMapper;

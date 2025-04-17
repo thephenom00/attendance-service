@@ -18,7 +18,9 @@ public class SecurityEndpoints {
             antMatcher(HttpMethod.GET,"/parent/**/children"),
             antMatcher(HttpMethod.GET,"/school"),
             antMatcher(HttpMethod.GET,"/school/**/trainings"),
-            antMatcher(HttpMethod.POST, "/parent/**/create-child")
+            antMatcher(HttpMethod.POST, "/parent/**/create-child"),
+            antMatcher(HttpMethod.GET, "/parent/**/children/event-status/**"),
+            antMatcher(HttpMethod.PATCH, "/child/**/register-to-event/**")
     );
 
     final RequestMatcher TRAINER_URLS = new OrRequestMatcher(

@@ -2,6 +2,7 @@ package cz.cvut.fel.attendance.service.api;
 
 import cz.cvut.fel.attendance.service.service.TrainerService;
 import cz.fel.cvut.attendance.service.api.TrainerApi;
+import cz.fel.cvut.attendance.service.model.TrainingDto;
 import cz.fel.cvut.attendance.service.model.trainer.ReportDto;
 import cz.fel.cvut.attendance.service.model.TrainingUnitDto;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,10 @@ public class TrainerApiImpl implements TrainerApi {
     @Override
     public ResponseEntity<List<ReportDto>> getCurrentReport(String email) {
         return ResponseEntity.ok(trainerService.getCurrentReport(email));
+    }
+
+    @Override
+    public ResponseEntity<TrainingDto> addTrainerToTraining(String email, Long id) {
+        return ResponseEntity.ok(trainerService.addTrainerToTraining(email, id));
     }
 }

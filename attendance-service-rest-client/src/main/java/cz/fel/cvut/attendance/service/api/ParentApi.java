@@ -1,6 +1,7 @@
 package cz.fel.cvut.attendance.service.api;
 
 import cz.fel.cvut.attendance.service.model.ChildDto;
+import cz.fel.cvut.attendance.service.model.parent.ChildEventStatusDto;
 import cz.fel.cvut.attendance.service.model.parent.ChildUpcomingTrainingUnitDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +24,10 @@ public interface ParentApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value="/{email}/children")
     ResponseEntity<List<ChildDto>> getChildren(@PathVariable String email);
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value="/{email}/children/event-status/{id}")
+    ResponseEntity<List<ChildEventStatusDto>> getChildrenEventStatus(@PathVariable String email, @PathVariable Long id);
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(value="/{email}/create-child", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
